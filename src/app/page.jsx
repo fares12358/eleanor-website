@@ -19,12 +19,12 @@ export default function Home() {
           <button className="text-white bg-[#34251f] text-lg px-12 py-3 font-bold mt-10 my_shadow">try now</button>
         </div>
         <div className=" flex items-center justify-center px-28 p-20">
-            <div className=" w-full h-full relative rounded-lg rounded-bl-[250px] overflow-hidden">
-              <Image src={'/images/main.jpg'} fill alt="main" className="object-cover"/>
-            </div>
+          <div className=" w-full h-full relative rounded-lg rounded-bl-[250px] overflow-hidden">
+            <Image src={'/images/main.jpg'} fill alt="main" className="object-cover" />
+          </div>
         </div>
       </div>
-      <div className="border border-black h-full w-full p-5 bg-white"></div>
+      
     </main>
   );
 }
