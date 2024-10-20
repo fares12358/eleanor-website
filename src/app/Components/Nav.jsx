@@ -24,7 +24,7 @@ export default function nav() {
     setNavigation(updatedNavigation);
   };
   return (
-    <Disclosure as="nav" className=" pt-4 sticky top-0 bg-myBlack z-50">
+    <Disclosure as="nav" className=" pt-4 sticky top-0 bg-myBlack z-50 bg-[#EEDDCC] ">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8 ">
         <div className="relative flex h-16 items-center justify-between ">
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
@@ -42,7 +42,7 @@ export default function nav() {
               />
             </DisclosureButton>
           </div>
-          <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
+          <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start px-8 sm:px-0">
             <div className="flex flex-shrink-0 items-center sm:">
               <h1 className="uppercase text-black font-bold md:text-4xl text-base">
                 Eleanor <span className="text-myGreen">.</span>
