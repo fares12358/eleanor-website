@@ -11,6 +11,11 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        // Adding custom fonts
+        Frank: [ "Frank Ruhl Libre", 'serif'],
+        Lato: [ "Lato", 'serif']
+      },
     },
   },
   plugins: [],
