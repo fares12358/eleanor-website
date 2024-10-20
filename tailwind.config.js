@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        my_light:'#eeddcc',
+        my_dark:'#34251f',
       },
       fontFamily: {
         // Adding custom fonts

@@ -1,4 +1,5 @@
 import "./globals.css";
+import { UserProvider } from "./Components/UserContext";
 
 import Nav from "./Components/Nav";
 
@@ -11,15 +12,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`w-screen h-screen overflow-hidden bg-[#EEDDCC]`}
+        className={`w-screen h-screen overflow-hidden bg-my_light`}
       >
-        <main className="w-full h-full container mx-auto   bg-[#EEDDCC] overflow-scroll no_scrollbar ">
-          <Nav />
-          {children}
+        <main className="w-full h-full container mx-auto   bg-my_light overflow-scroll no_scrollbar ">
+          <UserProvider>
+            <Nav />
+            {children}
+          </UserProvider>
         </main>
-
       </body>
-
     </html>
   );
 }

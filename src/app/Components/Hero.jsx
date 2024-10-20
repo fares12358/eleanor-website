@@ -11,7 +11,7 @@ const Hero = () => {
         <p className="text-lg md:text-xl font-normal mt-5 md:mt-10 w-full md:w-[80%]">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa ducimus veniam tempore rerum, dicta velit minus odio eius assumenda cumque dignissimos quaerat, dolor, aperiam voluptas totam eaque deleniti exercitationem necessitatibus.
         </p>
-        <button className="text-white bg-[#34251f] md:w-fit md:px-12 text-lg px-8 py-3 font-bold mt-6 md:mt-10 rounded-lg my_shadow">
+        <button className="text-white bg-my_dark md:w-fit md:px-12 text-lg px-8 py-3 font-bold mt-6 md:mt-10 rounded-lg my_shadow">
           Try Now
         </button>
       </div>
