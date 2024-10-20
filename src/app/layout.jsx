@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import Nav from "./Components/Nav";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,8 +13,13 @@ export default function RootLayout({ children }) {
       <body
         className={`w-screen h-screen overflow-hidden bg-[#EEDDCC]`}
       >
-        {children}
+        <main className="w-full h-full container mx-auto   bg-[#EEDDCC] overflow-scroll no_scrollbar ">
+          <Nav />
+          {children}
+        </main>
+
       </body>
+
     </html>
   );
 }

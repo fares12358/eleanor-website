@@ -66,7 +66,7 @@ export default function nav() {
                     {item.name}
                   </Link>
                 ))}
-                <button className=" px-6  text-2xl font-normal border border-black uppercase">login</button>
+                <Link href={'/Log'} className=" flex items-center justify-center px-6  text-2xl font-normal border border-black uppercase">login</Link>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function nav() {
               {item.name}
             </Link>
           ))}
-                <button className="px-4  text-md font-normal border border-black uppercase">login</button>
+                <Link href={'/Log'} className="flex items-center justify-center px-4  text-md font-normal border border-black uppercase">login</Link>
 
         </div>
       </DisclosurePanel>
