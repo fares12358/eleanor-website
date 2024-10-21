@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        my_light:'#eeddcc',
-        my_dark:'#34251f',
+        my_light:'#eae3dd',
+        my_dark:'#5c1819',
+        my_red:'#5c1819',
       },
       fontFamily: {
         // Adding custom fonts
