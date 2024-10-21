@@ -15,7 +15,7 @@ function classNames(...classes) {
 export default function nav() {
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
-    { name: "Wardrobe", href: "/", current: false },
+    { name: "Wardrobe", href: "/Wardrobe", current: false },
   ]);
   const handleClick = (clickedItem) => {
     const updatedNavigation = navigation.map((item) => ({
@@ -36,7 +36,7 @@ export default function nav() {
 
   }
   return (
-    <Disclosure as="nav" className=" pt-4 sticky top-0 bg-myBlack z-50 bg-my_light text-my_red ">
+    <Disclosure as="nav" className=" pt-4 sticky top-0 bg-myBlack z-50 bg-my_light text-my_red overflow-hidden ">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8 ">
         <div className="relative flex h-16 items-center justify-between ">
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
@@ -45,7 +45,7 @@ export default function nav() {
                 <Image onClick={handleViewbar} src={'/svgs/account.svg'}  alt="account" width={35} height={35} className="cursor-pointer sm:hidden block z-20" /> : ''
             }
             {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-my_red    focus:outline-none  focus:ring-none ">
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-my_red   focus:outline-none  focus:ring-none ">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
               <Bars3Icon
@@ -54,7 +54,7 @@ export default function nav() {
               />
               <XMarkIcon
                 aria-hidden="true"
-                className="hidden h-8 w-8 group-data-[open]:block border-2 text-my_red "
+                className="hidden h-8 w-8 group-data-[open]:block border-2 border-my_dark text-my_red "
               />
             </DisclosureButton>
 
@@ -65,7 +65,7 @@ export default function nav() {
               Eleanor.
               </h1>
             </div>
-            <div className="hidden  sm:block ml-auto mr-0">
+            <div className="hidden  sm:block ml-auto">
               <div className="flex space-x-4 ">
                 {navigation.map((item) => (
                   <Link
@@ -94,8 +94,8 @@ export default function nav() {
           </div>
         </div>
       </div>
-      <DisclosurePanel className="sm:hidden  absolute w-full bg-myBlack pl-6">
-        <div className="space-y-1 px-2 pb-3 pt-2 bg-my_light text-center">
+      <DisclosurePanel className="sm:hidden  absolute w-full bg-myBlack bg-my_light">
+        <div className=" px-2 pb-3 pt-2 bg-my_light text-center w-full ">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -103,8 +103,7 @@ export default function nav() {
               aria-current={item.current ? "page" : undefined}
               onClick={() => handleClick(item)}
               className={classNames(
-                item.current ? "text-my_red" : " text-my_red ",
-                "block rounded-md px-3 py-2 text-md font-bold"
+                "block rounded-md px-3 py-2 text-md font-bold text-my_red"
               )}
             >
               {item.name}
@@ -114,7 +113,7 @@ export default function nav() {
             isLoged ?
               ''
               :
-              <Link href={'/Log'}  className="flex items-center justify-center px-4  text-md font-medium border border-my_red text-my_red  uppercase">login</Link>
+              <Link href={'/Log'}  className="flex items-center justify-center px-4 w-fit mx-auto text-md font-medium border border-my_red text-my_red  uppercase">login</Link>
           }
         </div>
       </DisclosurePanel>
