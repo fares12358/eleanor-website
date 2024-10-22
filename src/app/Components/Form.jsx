@@ -64,7 +64,7 @@ const Form = () => {
     return (
         <form action="" className='flex flex-col items-center justify-center gap-5'>
             <h2 className='text-3xl font-bold text-my_red md:mb-5'>Eleanor</h2>
-            <p className=''>
+            <p className='text-my_red font-medium'>
                 {mode === 'sign' ? '' : mode === 'get' ? 'Get your password' : mode === 'create' ? 'Create your account' : ''}
             </p>
             {
