@@ -1,5 +1,7 @@
 const axios = require('axios');
-const api = 'http://localhost:5000';
+// const api = 'http://localhost:5000';
+// const api = 'https://eleanor-website-back-end.vercel.app';
+const api= process.env.PUBLIC_API;
 export const getData = () => {
     axios.get(`${api}/users`)
         .then(response => {
