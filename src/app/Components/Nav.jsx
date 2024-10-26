@@ -6,123 +6,171 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Image from "next/image";
+import { getUserData } from "../db/main";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-export default function nav() {
+
+const Nav = () => {
+  const { isLoged, setIsLoged, setUserId, userId } = useContext(UserContext);
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
-    { name: "Wardrobe", href: "/Wardrobe", current: false },
   ]);
-  const handleClick = (clickedItem) => {
-    const updatedNavigation = navigation.map((item) => ({
-      ...item,
-      current: item.name === clickedItem.name,
-    }));
-    setNavigation(updatedNavigation);
-  };
-  const { isLoged, setIsLoged } = useContext(UserContext);
-  const [view, setView] = useState(false)
-  const handleViewbar = () => {
-    (view) ? setView(false) : setView(true);
-  }
-  // const handleOut = (e) => {
-  //   e.preventDefault();
-  //   setIsLoged(false);
-  //   setView(false)
 
-  // }
+  useEffect(() => {
+    setNavigation([
+      { name: "Home", href: "/", current: true },
+      ...(isLoged ? [{ name: "Wardrobe", href: "/Wardrobe", current: false }] : []),
+    ]);
+  }, [isLoged]); // Update navigation items based on isLoged
+
+  const [view, setview] = useState(false);
+  const handleClick = (clickedItem) => {
+    setNavigation((prev) =>
+      prev.map((item) => ({
+        ...item,
+        current: item.name === clickedItem.name,
+      }))
+    );
+  };
+
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    setIsLoged(false);
+    setUserId(null);
+    localStorage.setItem("isLoged", JSON.stringify(false));
+    localStorage.setItem("userId", JSON.stringify(null));
+  };
+  const handleView = () => setview((prev) => !prev);
+  
+  const [username, setUsername] = useState("");
+  const handleGetUserData = async (id) => {
+    if (id !== null) {
+      try {
+        const response = await getUserData(id);
+        if (response.success) {
+          setUsername(response.data.name);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+  }
+
+ 
+  useEffect(() => {
+    handleGetUserData(userId);
+  }, [userId]);
+  
   return (
-    <Disclosure as="nav" className=" pt-4 sticky top-0 bg-myBlack z-50 bg-my_light text-my_red">
-      <div className="mx-auto w-full px-2 sm:px-6 lg:px-8 ">
-        <div className="relative flex h-16 items-center justify-between ">
+    <Disclosure as="nav" className="sticky top-0 z-50 bg-myBlack text-my_red pt-4">
+      <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
+        <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
-            {
-              isLoged ?
-                <Image onClick={handleViewbar} src={'/svgs/account.svg'} alt="account" width={35} height={35} className="cursor-pointer sm:hidden block z-20" /> : ''
-            }
-            {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-my_red   focus:outline-none  focus:ring-none ">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon
-                aria-hidden="true"
-                className="block h-8 w-8 group-data-[open]:hidden "
-              />
+            {isLoged && (
+              <div className="relative">
+                <Image
+                  onClick={handleView}
+                  src="/svgs/account.svg"
+                  alt="Logout"
+                  width={35}
+                  height={35}
+                  className="cursor-pointer sm:hidden block z-20 "
+                />
+                <div className={`${view ? 'flex' : 'hidden'} border border-black uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
+                  <div className="px-4 py-2 text-my_light font-bold">hi {username} ! </div>
+                  <div className="px-4 py-2 text-my_light font-bold" onClick={handleLogOut}>Log out</div>
+                </div>
+              </div>
+            )}
+            <DisclosureButton
+              className="group relative inline-flex items-center justify-center p-2 text-my_red focus:outline-none"
+              aria-label="Open main menu"
+            >
+              <Bars3Icon aria-hidden="true" className="block h-8 w-8 group-data-[open]:hidden" />
               <XMarkIcon
                 aria-hidden="true"
-                className="hidden h-8 w-8 group-data-[open]:block border-2 border-my_dark text-my_red "
+                className="hidden h-8 w-8 group-data-[open]:block border-2 border-my_dark text-my_red"
               />
             </DisclosureButton>
-
           </div>
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start px-5 sm:px-0">
-            <div className="flex flex-shrink-0 items-center sm:">
-              <h1 className="uppercase text-my_red  font-bold md:text-4xl text-xl border">
-                Eleanor.
-              </h1>
-            </div>
-            <div className="hidden  sm:block ml-auto">
-              <div className="flex space-x-4 ">
+            <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl border">
+              Eleanor.
+            </h1>
+            <div className="hidden ml-auto sm:block">
+              <div className="flex space-x-4">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    aria-current={item.current ? "page" : undefined}
                     onClick={() => handleClick(item)}
+                    aria-current={item.current ? "page" : undefined}
                     className={classNames(
-                      item.current
-                        ? " text-my_red  font-bold underline underline-offset-8"
-                        : " text-my_red ",
-                      "block  px-3 py-2 text-2xl font-bold  "
+                      item.current ? "font-bold underline underline-offset-8" : "",
+                      "block px-3 py-2 text-2xl font-bold text-my_red"
                     )}
                   >
                     {item.name}
                   </Link>
                 ))}
-                {
-                  isLoged ?
-                    <Image src={'/svgs/account.svg'} onClick={handleViewbar} alt="account" width={30} height={30} className="cursor-pointer" />
-                    :
-                    <Link href={'/Log'} className=" flex items-center justify-center px-6  text-2xl font-medium border border-my_red text-my_red  uppercase">login</Link>
-                }
+                {isLoged ? (
+                  <div className="relative flex items-center justify-center">
+                    <Image
+                      src="/svgs/account.svg"
+                      onClick={handleView}
+                      alt="Logout"
+                      width={30}
+                      height={30}
+                      className="cursor-pointer"
+                    />
+                    <div className={`${view ? 'flex' : 'hidden'} border  border-black absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
+                      <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
+                      <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>Log out</div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href="/Log"
+                    className="flex items-center justify-center px-6 text-2xl font-medium text-my_red border border-my_red uppercase"
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <DisclosurePanel className="sm:hidden  absolute w-full bg-myBlack bg-my_light">
-        <div className=" px-2 pb-3 pt-2 bg-my_light text-center w-full ">
+      <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light">
+        <div className="px-2 pb-3 pt-2 text-center bg-my_light">
           {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              aria-current={item.current ? "page" : undefined}
               onClick={() => handleClick(item)}
-              className="block rounded-md px-3 py-2 text-md font-bold text-my_red">
+              aria-current={item.current ? "page" : undefined}
+              className="block px-3 py-2 text-md font-bold text-my_red"
+            >
               {item.name}
             </Link>
           ))}
-          {
-            isLoged ?
-              ''
-              :
-              <Link href={'/Log'} className="flex items-center justify-center px-4 w-fit mx-auto text-md font-medium border border-my_red text-my_red  uppercase">login</Link>
-          }
+          {!isLoged && (
+            <Link
+              href="/Log"
+              className="flex items-center justify-center px-4 mx-auto text-md font-medium text-my_red border border-my_red uppercase w-fit"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </DisclosurePanel>
-      {/* <div
-        className={`account-panal absolute top-[80px] transition-all  ${(view) ? `right-0` : `-right-full`} h-[calc(100vh-80px)] w-[200px] bg-gradient-to-tr
-       from-[#7d6241] to-[#dcb68c] rounded-tl-[30px] border-2 border-my_dark drp_sh p-4`}>
-        <Image src={'/svgs/close.svg'} onClick={handleViewbar} alt="close" width={35} height={35} className="cursor-pointer" />
-        <div className="content flex flex-col items-start justify-center gap-5 mt-10 font-bold ">
-          <div className="text-xl self-center">Hi fares !</div>
-          <button className="bg-my_dark self-center text-white font-bold text-sm px-10 py-2 rounded-md uppercase my_shadow" onClick={handleOut}>log out</button>
-        </div>
-      </div> */}
     </Disclosure>
   );
-}
+};
+
+export default Nav;

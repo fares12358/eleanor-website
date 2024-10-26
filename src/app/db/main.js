@@ -1,18 +1,22 @@
 const axios = require('axios');
 // const api = 'http://localhost:5000';
 const api = 'https://eleanor-website-back-end.vercel.app';
-export const getData = () => {
-    axios.get(`${api}/users`)
-        .then(response => {
-            // Handle the response data
-            console.log(response.data[0]);
-        })
-        .catch(error => {
-            // Handle any errors
-            console.error('Error:', error);
-        });
-}
-
+export const getUserData = async (id) => {
+    try {
+      const response = await axios.get(`${api}/Getuser`, {
+        params: {
+            id: id,
+          },
+      });
+      return { success: true, data: response.data };
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return { success: false, message: error.response.data.message };
+      } else {
+        return { success: false, message: 'An error occurred. Please try again.' };
+      }
+    }
+  };
 export const loginUser = async (name, pass) => {
     try {
         const response = await axios.post(`${api}/login`, { name, pass });
@@ -25,7 +29,6 @@ export const loginUser = async (name, pass) => {
         }
     }
 };
-
 export const handleCreate = async (username, password, name, email) => {
     try {
         const response = await axios.post(`${api}/CreateUser`, {
@@ -47,22 +50,22 @@ export const handleCreate = async (username, password, name, email) => {
         }
     }
 };
-
 // Function to request forgotten password
 export const getForgetPass = async (name) => {
     try {
-      const response = await axios.post(`${api}/getPass`, { name }); // Make a request to get the password
-      if (response.data.success) {
-        return { success: true, password: response.data.password }; // Return success with password
-      } else {
-        return { success: false, message: response.data.message }; // Return failure with message
-      }
+        const response = await axios.post(`${api}/getPass`, { name }); // Make a request to get the password
+        if (response.data.success) {
+            return { success: true, password: response.data.password }; // Return success with password
+        } else {
+            return { success: false, message: response.data.message }; // Return failure with message
+        }
     } catch (error) {
-      if (error.response) {
-        return { success: false, message: error.response.data.message }; // Return failure with message
-      } else {
-        return { success: false, message: 'An error occurred. Please try again.' }; // Return general error message
-      }
+        if (error.response) {
+            return { success: false, message: error.response.data.message }; // Return failure with message
+        } else {
+            return { success: false, message: 'An error occurred. Please try again.' }; // Return general error message
+        }
     }
-  };
-  
+};
+
+

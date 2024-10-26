@@ -136,7 +136,9 @@ const Form = () => {
                 if (response.success) {
                     // Successful login
                     setUserId(response.data);          // Save user ID
-                    setIsLoged(true);                  // Set logged in state
+                    setIsLoged(true);
+                    localStorage.setItem('userId', JSON.stringify(response.data)); // Save user ID
+                    localStorage.setItem('isLoged', JSON.stringify(true));  // Set logged in state
                     setFormData({ username: '', password: '' });  // Clear form data
                     setErrors({ username: '', password: '' });    // Clear any errors
                     router.push('/');
@@ -194,7 +196,7 @@ const Form = () => {
         }
     };
     return (
-        
+
         isLoading ?
             <ReqLoader />
             :
