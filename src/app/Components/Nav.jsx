@@ -42,17 +42,8 @@ const Nav = () => {
     e.preventDefault();
     setIsLoged(false);
     setUserId(null);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("isLoged", JSON.stringify(false));
-      localStorage.setItem("userId", JSON.stringify(null));
-    }
   };
 
-  useEffect(() => {
-    // This will run on the client side
-    localStorage.setItem("isLoged", JSON.stringify(false));
-    localStorage.setItem("userId", JSON.stringify(null));
-  }, [isLoged,userId]);
 
   const handleView = () => setview((prev) => !prev);
 
