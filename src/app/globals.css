@@ -187,6 +187,10 @@
   text-align: right;
 }
 
+.my_transition{
+  transition: all 0.5s;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

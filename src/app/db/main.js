@@ -1,6 +1,6 @@
 const axios = require('axios');
-// const api = 'http://localhost:5000';
-const api = 'https://eleanor-website-back-end.vercel.app';
+const api = 'http://localhost:5000';
+// const api = 'https://eleanor-website-back-end.vercel.app';
 export const getUserData = async (id) => {
     try {
       const response = await axios.get(`${api}/Getuser`, {

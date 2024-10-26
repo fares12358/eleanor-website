@@ -67,7 +67,7 @@ const Nav = () => {
   }, [userId]);
   
   return (
-    <Disclosure as="nav" className="sticky top-0 z-50 bg-myBlack text-my_red pt-4">
+    <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
@@ -77,11 +77,11 @@ const Nav = () => {
                   onClick={handleView}
                   src="/svgs/account.svg"
                   alt="Logout"
-                  width={35}
-                  height={35}
+                  width={30}
+                  height={30}
                   className="cursor-pointer sm:hidden block z-20 "
                 />
-                <div className={`${view ? 'flex' : 'hidden'} border border-black uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
+                <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
                   <div className="px-4 py-2 text-my_light font-bold">hi {username} ! </div>
                   <div className="px-4 py-2 text-my_light font-bold" onClick={handleLogOut}>Log out</div>
                 </div>
@@ -99,7 +99,7 @@ const Nav = () => {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start px-5 sm:px-0">
-            <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl border">
+            <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
               Eleanor.
             </h1>
             <div className="hidden ml-auto sm:block">
@@ -128,7 +128,7 @@ const Nav = () => {
                       height={30}
                       className="cursor-pointer"
                     />
-                    <div className={`${view ? 'flex' : 'hidden'} border  border-black absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
+                    <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
                       <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
                       <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>Log out</div>
                     </div>
@@ -147,7 +147,7 @@ const Nav = () => {
         </div>
       </div>
       <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light">
-        <div className="px-2 pb-3 pt-2 text-center bg-my_light">
+        <div className="px-2 pb-3 pt-2 text-center bg-my_light my_transition shadow-2xl">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -162,7 +162,7 @@ const Nav = () => {
           {!isLoged && (
             <Link
               href="/Log"
-              className="flex items-center justify-center px-4 mx-auto text-md font-medium text-my_red border border-my_red uppercase w-fit"
+              className="flex items-center justify-center px-4 mx-auto my-3 text-md font-medium text-my_red border border-my_red uppercase w-fit"
             >
               Login
             </Link>

@@ -1,7 +1,22 @@
+'use client';
 import Image from 'next/image'
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from "./UserContext";
+import { useRouter } from 'next/navigation';
 
 const Hero = () => {
+  const { isLoged } = useContext(UserContext);
+  const router = useRouter();
+
+  const handleTryNow=(e)=>{
+    e.preventDefault();
+    if(isLoged){
+      router.push('/Wardrobe');
+    }else{
+      router.push('/Log');
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:p-5 overflow-hidden text-my_red">
       <div className="p-5 flex flex-col justify-center order-2 lg:order-1">
@@ -11,7 +26,7 @@ const Hero = () => {
         <p className="text-lg md:text-xl font-normal mt-5 md:mt-10 w-full md:w-[80%] text-my_red ">
         <span className='font-bold'>Eleanor</span> is an electronic wardrobe application that aims to organize and coordinate personal fashion. It collects all the clothes available in your closet in an organized manner, making it easier to manage and coordinate your daily look in a smooth, distinctive, and orderly style.
         </p>
-        <button className="text-white bg-my_dark md:w-fit md:px-12 text-lg px-8 py-3 font-bold mt-6 mb-10 lg:mb-0 md:mt-10 rounded-lg my_shadow">
+        <button onClick={handleTryNow} className="text-white bg-my_dark md:w-fit md:px-12 text-lg px-8 py-3 font-bold mt-6 mb-10 lg:mb-0 md:mt-10 rounded-lg my_shadow">
           Try Now
         </button>
       </div>
