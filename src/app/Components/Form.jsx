@@ -124,7 +124,7 @@ const Form = () => {
         }
         return false;
     };
-    // Form submission handler
+    // Form submission handlera
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, password, name, email } = formData;
@@ -137,8 +137,10 @@ const Form = () => {
                     // Successful login
                     setUserId(response.data);          // Save user ID
                     setIsLoged(true);
-                    localStorage.setItem('userId', JSON.stringify(response.data)); // Save user ID
-                    localStorage.setItem('isLoged', JSON.stringify(true));  // Set logged in state
+                    if (typeof window !== 'undefined') {
+                        localStorage.setItem('userId', JSON.stringify(response.data));
+                        localStorage.setItem('isLoged', JSON.stringify(true));
+                    }
                     setFormData({ username: '', password: '' });  // Clear form data
                     setErrors({ username: '', password: '' });    // Clear any errors
                     router.push('/');
@@ -195,6 +197,12 @@ const Form = () => {
             return false;
         }
     };
+    useEffect(() => {
+        if (isLoged) {
+            localStorage.setItem('userId', JSON.stringify(userId));
+            localStorage.setItem('isLoged', JSON.stringify(true));
+        }
+    }, [isLoged, userId]);
     return (
 
         isLoading ?

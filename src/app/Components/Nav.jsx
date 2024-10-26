@@ -42,11 +42,20 @@ const Nav = () => {
     e.preventDefault();
     setIsLoged(false);
     setUserId(null);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("isLoged", JSON.stringify(false));
+      localStorage.setItem("userId", JSON.stringify(null));
+    }
+  };
+
+  useEffect(() => {
+    // This will run on the client side
     localStorage.setItem("isLoged", JSON.stringify(false));
     localStorage.setItem("userId", JSON.stringify(null));
-  };
+  }, [isLoged,userId]);
+
   const handleView = () => setview((prev) => !prev);
-  
+
   const [username, setUsername] = useState("");
   const handleGetUserData = async (id) => {
     if (id !== null) {
@@ -61,11 +70,11 @@ const Nav = () => {
     }
   }
 
- 
+
   useEffect(() => {
     handleGetUserData(userId);
   }, [userId]);
-  
+
   return (
     <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
