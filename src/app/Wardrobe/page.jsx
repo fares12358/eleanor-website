@@ -15,20 +15,20 @@ const page = () => {
 
                 <Image src={'/svgs/close-white.svg'} alt='close' width={25} height={25} className='cursor-pointer z-30  absolute right-3 top-3 lg:hidden' onClick={handleCatView} />
 
-                    <div className="w-full text-sm lg:text-lg  font-bold cursor-pointer py-2 lg:py-4  px-2 md:px-5 mt-8 lg:mt-0 border-my_light uppercase flex items-center justify-between">
-                        <span>Favoraite</span>
-                        <Image src={'/svgs/stare.svg'} alt='stare' width={20} height={20} />
-                    </div>
-                    <div className="w-full text-sm lg:text-lg font-bold cursor-pointer py-2 lg:py-4 px-2 md:px-5 border-t border-my_light uppercase flex items-center justify-between">
-                        <span>used</span>
-                        <Image src={'/svgs/used.svg'} alt='stare' width={20} height={20} />
-                    </div>
+                <div className="w-full text-sm lg:text-lg  font-bold cursor-pointer py-2 lg:py-4  px-2 md:px-5 mt-8 lg:mt-0 border-my_light uppercase flex items-center justify-between">
+                    <span>Favoraite</span>
+                    <Image src={'/svgs/stare.svg'} alt='stare' width={20} height={20} />
+                </div>
+                <div className="w-full text-sm lg:text-lg font-bold cursor-pointer py-2 lg:py-4 px-2 md:px-5 border-t border-my_light uppercase flex items-center justify-between">
+                    <span>used</span>
+                    <Image src={'/svgs/used.svg'} alt='stare' width={20} height={20} />
+                </div>
 
-                    <div className="w-full text-base lg:text-lg font-semibold cursor-pointer py-2 lg:py-4 px-2 md:px-5 border-y border-my_light uppercase flex flex-nowrap items-center justify-between">
-                        <span className='text-center'>add Category</span>
-                        <Image src={'/svgs/add.svg'} alt='stare' width={20} height={20} />
-                    </div>
-                    <h2 className='text-lg sm:text-2xl self-center my-4'>Category</h2>
+                <div className="w-full text-base lg:text-lg font-semibold cursor-pointer py-2 lg:py-4 px-2 md:px-5 border-y border-my_light uppercase flex flex-nowrap items-center justify-between">
+                    <span className='text-center'>add Category</span>
+                    <Image src={'/svgs/add.svg'} alt='stare' width={20} height={20} />
+                </div>
+                <h2 className='text-lg sm:text-2xl self-center my-4'>Category</h2>
                 <ul className='flex flex-col  h-full w-full overflow-auto no_scrollbar list-none cursor-pointer'>
 
                     {
@@ -41,21 +41,27 @@ const page = () => {
             <div className="viewer h-full w-full flex flex-col items-center justify-start gap-10 p-5 overflow-y-scroll no_scrollbar relative">
                 <div className={` my_transition  absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden ${view ? "hidden" : 'block'}  `} onClick={handleCatView}>
                     <Image src={'/svgs/left_errow.svg'} alt='arrow-view' width={15} height={15} />
-                </div>{/*
-                <div className="rounded-xl p-5 shadow-2xl gap-2 flex flex-col">
-                    <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px]  relative">
+                </div>
+
+{/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
+                <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col">
+                    <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative ">
                         <Image src={'/svgs/close.svg'} alt='close' width={30} height={30} className='cursor-pointer relative z-10' />
-                        <Image src={'/svgs/T-shit.svg'} alt='imge' fill className='object-contain' />
+                        <Image src={'/images/Ho-1.png'} alt='imge' fill className='object-contain' />
                     </div>
                     <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative">
                         <Image src={'/svgs/close.svg'} alt='close' width={30} height={30} className='cursor-pointer relative z-10' />
-                        <Image src={'/svgs/Pants.svg'} alt='imge' fill className='object-contain' />
+                        <Image src={'/images/Pant-2.png'} alt='imge' fill className='object-contain' />
                     </div>
                 </div>
-                <div className="flex gap-5 items-center justify-center">
-                    <button className='text-xl bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>use it</button>
-                    <button className='text-xl bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>clear</button>
-                </div> */}
+
+                <div className="flex flex-col md:flex-row gap-5 items-center justify-center">
+                    <button className='text-sm bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>use it</button>
+                    <button className='text-sm bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>clear</button>
+                </div>
+
+{/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
             </div>
             {
                 items.length > 0 ?
@@ -67,7 +73,7 @@ const page = () => {
                                     <li className='bg-my_light md:h-[100px] sm:h-[80px] h-[60px] md:w-[100px] sm:w-[80px] w-[60px] mx-auto cursor-pointer flex items-center justify-center rounded-xl'>{item}</li>
                                 ))
                             }
-                             {
+                            {
                                 items.map((item) => (
                                     <li className='bg-my_light md:h-[100px] sm:h-[80px] h-[60px] md:w-[100px] sm:w-[80px] w-[60px] mx-auto cursor-pointer flex items-center justify-center rounded-xl'>{item}</li>
                                 ))
