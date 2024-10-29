@@ -8,8 +8,10 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isLoged, setIsLoged] = useState(() =>false);
   const [userId, setUserId] = useState(() => null);
+  const [viewUplImg, setViewUplImg] = useState(false);
+  const [viewUpCat, setViewUpCat] = useState(false);
   return (
-    <UserContext.Provider value={{isLoged, setIsLoged,userId, setUserId }}>
+    <UserContext.Provider value={{isLoged, setIsLoged,userId, setUserId ,viewUplImg, setViewUplImg,viewUpCat, setViewUpCat}}>
       {children}
     </UserContext.Provider>
   );

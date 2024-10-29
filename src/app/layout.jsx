@@ -11,7 +11,7 @@ export default async function RootLayout({children}) {
       <body
         className={`w-screen h-screen overflow-hidden bg-my_light`}
       >
-          <main className="w-full h-full container mx-auto   bg-my_light overflow-y-scroll no_scrollbar ">
+          <main className="w-full h-full  mx-auto   bg-my_light overflow-y-scroll no_scrollbar ">
             <UserProvider>
               <Nav />
               {children}

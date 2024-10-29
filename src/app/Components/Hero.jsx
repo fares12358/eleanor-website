@@ -32,7 +32,7 @@ const Hero = () => {
       </div>
       <div className="flex items-center justify-center md:py-20 p-0 mt-10 md:mt-0 order-1 lg:order-2">
         <div className="relative w-full h-[300px] md:h-[500px]">
-          <Image src={'/images/freepik.jpeg'} fill alt="main" className="object-contain  md:rounded-bl-[150px]" />
+          <Image src={'/images/freepik.jpeg'} fill alt="main" className="object-contain" />
         </div>
       </div>
     </div>
