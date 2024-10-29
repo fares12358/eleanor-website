@@ -1,7 +1,7 @@
 const axios = require('axios');
 // const api = 'http://localhost:5000';
-// const api = 'https://eleanor-website-back-end.vercel.app';
-const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+const api = 'https://eleanor-website-back-end.vercel.app';
+// const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
 
 export const getUserData = async (id) => {
     try {

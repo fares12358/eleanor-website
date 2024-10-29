@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { addCategory } from '../db/main';
 
 const AddCategory = () => {
-    const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+    // const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+    const api = 'https://eleanor-website-back-end.vercel.app';
+
     const { userId, viewUpCat, setViewUpCat } = useContext(UserContext);
     const [catNamIN, setCatNamIN] = useState('');
     const [Error, setError] = useState('')
@@ -27,7 +29,7 @@ const AddCategory = () => {
             console.error(error);
         }
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!catNamIN) {

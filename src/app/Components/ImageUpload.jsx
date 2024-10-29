@@ -7,8 +7,10 @@ import Image from 'next/image';
 const ImageUpload = (props) => {
   const [image, setImage] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
-  const { userId,viewUplImg, setViewUplImg } = useContext(UserContext);
-  const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+  const { userId, viewUplImg, setViewUplImg } = useContext(UserContext);
+  // const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+  const api = 'https://eleanor-website-back-end.vercel.app';
+
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
@@ -36,9 +38,9 @@ const ImageUpload = (props) => {
   };
 
   return (
-    <div className={`${viewUplImg? 'flex':'hidden'} w-full h-full absolute top-0 left-0 items-center justify-center glass z-50`}>
+    <div className={`${viewUplImg ? 'flex' : 'hidden'} w-full h-full absolute top-0 left-0 items-center justify-center glass z-50`}>
       <div className="image-upload bg-my_dark w-fit max-w-[90%] p-5 rounded-xl flex flex-col items-center justify-center gap-4 text-my_light relative">
-        <Image src={'/svgs/close-white.svg'} alt='close' width={25} height={25} className='cursor-pointer z-30  absolute right-3 top-3 ' onClick={()=>setViewUplImg(false)} />
+        <Image src={'/svgs/close-white.svg'} alt='close' width={25} height={25} className='cursor-pointer z-30  absolute right-3 top-3 ' onClick={() => setViewUplImg(false)} />
         <h2 className="text-xl text-my_light font-bold uppercase mt-4">Upload Image</h2>
         <form className="flex flex-col gap-4 items-center justify-center">
           <input
