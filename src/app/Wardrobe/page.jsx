@@ -39,6 +39,7 @@ const Page = () => {
             setViewItem(true);
             setKeyCATegory(catKey);
             const response = await getItemByCat(userId, catKey);
+            
             if (response.success) {
                 setItems(response.items);
             } else {
@@ -61,8 +62,6 @@ const Page = () => {
     useEffect(() => {
         fetchCategories();
     }, [userId, viewUpCat]);
-
-
 
 
     return (
@@ -160,7 +159,7 @@ const Page = () => {
                                     className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-xl'
                                 >
                                     <img
-                                        src={`${api}/${item.replace(/\\/g, '/')}`}
+                                        src={item}
                                         alt={`User Image ${index + 1}`}
                                         className="object-contain w-full h-full"
                                     />

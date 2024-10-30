@@ -1,6 +1,6 @@
 const axios = require('axios');
-// const api = 'http://localhost:5000';
-const api = 'https://eleanor-website-back-end.vercel.app';
+const api = 'http://localhost:5000';
+// const api = 'https://eleanor-website-back-end.vercel.app';
 // const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
 
 export const getUserData = async (id) => {
@@ -100,20 +100,22 @@ export const getItemByCat = async (id, catKey) => {
         });
 
         if (response.data.success) {
-            console.log(response);
+            console.log('Items fetched successfully:', response.data.items);
             return { success: true, items: response.data.items }; // Return success with items
         } else {
+            console.error('Fetch failed:', response.data.message);
             return { success: false, message: response.data.message }; // Return failure with message
         }
     } catch (error) {
         if (error.response) {
+            console.error('Error response from server:', error.response.data.message);
             return { success: false, message: error.response.data.message }; // Return failure with message
         } else {
+            console.error('Network error:', error);
             return { success: false, message: 'An error occurred. Please try again.' }; // Return general error message
         }
     }
 };
-
 export const addCategory = async (id, catName) => {
     try {
         const response = await axios.post(`${api}/addCategory`, { id, catName });
