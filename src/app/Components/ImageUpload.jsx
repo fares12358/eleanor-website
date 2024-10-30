@@ -8,7 +8,7 @@ const ImageUpload = (props) => {
   const [image, setImage] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   const { userId, viewUplImg, setViewUplImg } = useContext(UserContext);
-  const api = 'http://localhost:5000'; // Change this to your backend API when deployed
+  const api = process.env.NEXT_PUBLIC_API_KEY; // Change this to your backend API when deployed
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
