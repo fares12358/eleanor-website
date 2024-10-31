@@ -17,6 +17,7 @@ const AddCategory = () => {
 
     const handleAddCategory = async () => {
         try {
+            setError('adding...')
             const response = await addCategory(userId, catNamIN);
             if (response.success) {
                 setError('Category added successfully!'); // Display success message
