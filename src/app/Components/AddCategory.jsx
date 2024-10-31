@@ -26,7 +26,6 @@ const AddCategory = () => {
             }
         } catch (error) {
             setError('Error adding category');
-            console.error(error);
         }
     };
 

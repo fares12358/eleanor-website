@@ -69,7 +69,6 @@ export const getForgetPass = async (name) => {
         }
     }
 };
-
 // Function to get cat user
 export const getCategories = async (id) => {
     try {
@@ -77,7 +76,6 @@ export const getCategories = async (id) => {
            id
           });
         if (response.data.success) {
-            console.log(response);
             return { success: true, cat: response.data.cat }; // Return success with categories
         } else {
             return { success: false, message: response.data.message }; // Return failure with message
@@ -90,7 +88,6 @@ export const getCategories = async (id) => {
         }
     }
 };
-
 // Function to get item by cat key
 export const getItemByCat = async (id, catKey) => {
     try {
@@ -100,18 +97,14 @@ export const getItemByCat = async (id, catKey) => {
         });
 
         if (response.data.success) {
-            console.log('Items fetched successfully:', response.data.items);
             return { success: true, items: response.data.items }; // Return success with items
         } else {
-            console.error('Fetch failed:', response.data.message);
             return { success: false, message: response.data.message }; // Return failure with message
         }
     } catch (error) {
         if (error.response) {
-            console.error('Error response from server:', error.response.data.message);
             return { success: false, message: error.response.data.message }; // Return failure with message
         } else {
-            console.error('Network error:', error);
             return { success: false, message: 'An error occurred. Please try again.' }; // Return general error message
         }
     }
@@ -126,7 +119,6 @@ export const addCategory = async (id, catName) => {
             return { success: false, message: response.data.message || 'Failed to add category' };
         }
     } catch (error) {
-        console.error("Add Category Error:", error);
         return { success: false, message: error.message || 'Internal error' };
     }
 };

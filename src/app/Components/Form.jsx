@@ -167,7 +167,6 @@ const Form = () => {
                     setErrors((prev) => ({ ...prev, username: response.message }));
                 }
             } catch (error) {
-                console.error('Create Account Error:', error); // Log the error
                 setErrors((prev) => ({ ...prev, username: 'An error occurred during account creation' })); // Handle generic error
             } finally {
                 setIsLoading(false);

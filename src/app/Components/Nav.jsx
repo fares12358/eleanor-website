@@ -56,7 +56,7 @@ const Nav = () => {
           setUsername(response.data.name);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        setUsername("unKnown");
       }
     }
   }

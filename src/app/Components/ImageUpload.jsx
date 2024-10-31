@@ -53,7 +53,6 @@ const ImageUpload = (props) => {
       setImage(null); // Reset the image state
     } catch (error) {
       setStatusMessage(error.response?.data.message || 'Error uploading image');
-      console.error(error); // Log the error for debugging
     }
   };
 

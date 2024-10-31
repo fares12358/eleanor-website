@@ -32,10 +32,8 @@ const Page = () => {
             if (response.success) {
                 setCategories(response.cat);
             } else {
-                console.error('Failed to fetch categories:', response.message);
             }
         } catch (error) {
-            console.error('Error fetching categories:', error);
         }
     };
 
@@ -47,13 +45,11 @@ const Page = () => {
 
             const response = await getItemByCat(userId, catKey);
             if (response.success) {
-                setItems(response.items);
                 setViewItem(true);
+                setItems(response.items);
             } else {
-                console.error('Failed to fetch items:', response.message);
             }
         } catch (error) {
-            console.error('Error fetching items:', error);
         }
     };
 
