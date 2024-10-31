@@ -122,3 +122,17 @@ export const addCategory = async (id, catName) => {
         return { success: false, message: error.message || 'Internal error' };
     }
 };
+
+export const deleteItem = async (id, catName, url) => {
+    try {
+        const response = await axios.post(`${api}/deleteItem`, { id, catName, url });
+
+        if (response.data.success) {
+            return { success: true, data: response.data.message };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to delete item' };
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};

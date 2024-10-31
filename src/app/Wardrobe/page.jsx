@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { Suspense, useContext, useEffect, useState } from 'react';
-import { getCategories, getItemByCat } from '../db/main';
+import { deleteItem, getCategories, getItemByCat } from '../db/main';
 import { UserContext } from '../Components/UserContext';
 import { useSearchParams } from 'next/navigation';
 import ImageUpload from '../Components/ImageUpload';
@@ -88,6 +88,17 @@ const Page = () => {
         }
         setSelectView(false);
     };
+    const handleDeleteItem = async (url) => {
+        try {
+            const response = await deleteItem(userId, KeyCATegory, url);
+
+            if (response.success) {
+                fetchItemsByCategory(KeyCATegory);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (
@@ -117,7 +128,7 @@ const Page = () => {
                         <span>Favorite</span>
                     </div>
                     <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5  uppercase flex items-center justify-start gap-2 mt-2">
-                        <Image src='/svgs/used.svg' alt='used' width={15} height={15} />
+                        <Image src='/svgs/used-black.svg' alt='used' width={15} height={15} />
                         <span>Used</span>
                     </div>
                     <ul className='flex flex-col gap-2 h-full w-full  overflow-auto no_scrollbar list-none cursor-pointer py-5 my-5 border-y border-my_light'>
@@ -146,14 +157,31 @@ const Page = () => {
                         <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
                     </div>
 
-                    <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col items-center justify-center ">
+                    <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col items-center justify-center">
+                        {SelectedTop !== '' && SelectedBottom !== '' ?
+                            <div className="flex items-center justify-around gap-3 w-full my-5 ">
+                                <div className="flex items-center justify-center gap-2 bg-my_dark px-4 py-1 rounded-[5px] cursor-pointer">
+                                    <Image src={'/svgs/used.svg'} alt='add' width={20} height={20} title='add to used' />
+                                    <span className='text-xs text-my_light'>use it</span>
+                                </div>
+                                <div className="flex items-center justify-center gap-2 bg-my_dark px-4 py-1 rounded-[5px] cursor-pointer">
+                                    <Image src={'/svgs/isFav.svg'} alt='add' width={20} height={20} title='add to favourite' />
+                                    <span className='text-xs  text-my_light'>add favourite</span>
+                                </div>
+                            </div> 
+                            : 
+                            ''
+                        }
                         <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
                             {
                                 SelectedTop === '' ?
                                     <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain ' />
                                     :
                                     <>
-                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={() => { setSelectedTop('') }} />
+                                        <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
+                                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelectedTop('') }} />
+                                            <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { handleDeleteItem(SelectedTop); setSelectedTop('') }} />
+                                        </div>
                                         <Suspense fallback={<LoadingSpinner />}>
                                             <Image src={SelectedTop} alt='image' fill className='object-contain' />
                                         </Suspense>
@@ -174,7 +202,10 @@ const Page = () => {
                                     <Image src={'/svgs/pants2.svg'} alt='image' width={250} height={250} className='object-contain ' />
                                     :
                                     <>
-                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={() => { setSelectedBootom('') }} />
+                                        <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
+                                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10' onClick={() => { setSelectedBootom('') }} />
+                                            <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20' onClick={() => { handleDeleteItem(SelectedBottom); setSelectedBootom('') }} />
+                                        </div>
                                         <Suspense fallback={<LoadingSpinner />}>
                                             <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
                                         </Suspense>
