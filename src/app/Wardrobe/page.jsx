@@ -12,35 +12,40 @@ const Page = () => {
     const { isLoged, userId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat } = useContext(UserContext);
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
-    const [KeyCATegory, setKeyCATegory] = useState('')
+    const [KeyCATegory, setKeyCATegory] = useState('');
     const [view, setView] = useState(false);
     const [viewItem, setViewItem] = useState(false);
-    const [SelectView, setSelectView] = useState(false)
-    const [SelectedURl, setSelectedURl] = useState('')
+    const [SelectView, setSelectView] = useState(false);
+    const [SelectedURl, setSelectedURl] = useState('');
     const [SelectedTop, setSelectedTop] = useState('');
     const [SelectedBottom, setSelectedBootom] = useState('');
-    const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
+
+    // Toggle visibility of the category list
     const toggleCategoryView = () => setView((prev) => !prev);
+
+    // Fetch categories for the user if userId is available
     const fetchCategories = async () => {
-        if (userId) {
-            try {
-                const response = await getCategories(userId);
-                if (response.success) {
-                    setCategories(response.cat);
-                } else {
-                    console.error('Failed to fetch categories:', response.message);
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
+        if (!userId) return;
+
+        try {
+            const response = await getCategories(userId);
+            if (response.success) {
+                setCategories(response.cat);
+            } else {
+                console.error('Failed to fetch categories:', response.message);
             }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
         }
     };
+
+    // Fetch items for a selected category and toggle item view
     const fetchItemsByCategory = async (catKey) => {
         try {
-            setView(false); ////////////////////////////////
+            setView(false);
             setKeyCATegory(catKey);
+
             const response = await getItemByCat(userId, catKey);
-            
             if (response.success) {
                 setItems(response.items);
                 setViewItem(true);
@@ -51,40 +56,42 @@ const Page = () => {
             console.error('Error fetching items:', error);
         }
     };
-    const handleAddItem = async () => {
-        if (KeyCATegory !== '') {
-            setViewUplImg(true);
-        }
-    }
-    const handleAddCat = async () => {
-        if (isLoged && userId !== '') {
-            setViewUpCat(true);
-        }
-    }
+
+    // Show upload item view if a category is selected
+    const handleAddItem = () => {
+        if (KeyCATegory) setViewUplImg(true);
+    };
+
+    // Show upload category view if the user is logged in
+    const handleAddCat = () => {
+        if (isLoged && userId) setViewUpCat(true);
+    };
+
+    // Fetch categories whenever userId or viewUpCat changes
     useEffect(() => {
         fetchCategories();
     }, [userId, viewUpCat]);
 
+    // Fetch items whenever userId or viewUplImg changes
     useEffect(() => {
-        fetchItemsByCategory(KeyCATegory);
+        if (KeyCATegory) fetchItemsByCategory(KeyCATegory);
     }, [userId, viewUplImg]);
 
-    const HandleSelectedItem=(urlItem)=>{
+    // Handle selected item URL and display in specified position
+    const HandleSelectedItem = (urlItem) => {
         setSelectView(true);
         setSelectedURl(urlItem);
-    }
-    const handleviewSelctedItems=(place)=>{
-        if(place === 'top'){
+    };
 
+    const handleviewSelctedItems = (place) => {
+        if (place === 'top') {
             setSelectedTop(SelectedURl);
-        }else{
+        } else {
             setSelectedBootom(SelectedURl);
         }
-
         setSelectView(false);
+    };
 
-
-    }
 
     return (
         !isLoged ?
@@ -129,9 +136,6 @@ const Page = () => {
                     </ul>
 
                 </div>
-
-
-
                 <div className=" h-full w-full flex flex-col items-center justify-start gap-10 p-5 overflow-y-scroll  no_scrollbar relative">
                     <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden ${view ? 'hidden' : 'block'}`} onClick={toggleCategoryView}>
                         <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
@@ -142,31 +146,31 @@ const Page = () => {
                             <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
                             {
                                 SelectedTop === '' ?
-                                 <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain' />
-                                :
-                                 <Image src={SelectedTop} alt='image' fill className='object-contain' />
+                                    <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain' />
+                                    :
+                                    <Image src={SelectedTop} alt='image' fill className='object-contain' />
 
                             }
                             {
-                                SelectView? 
-                                <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer"  onClick={()=>handleviewSelctedItems('top')}>view here</div>
-                                :
-                                ""
+                                SelectView ?
+                                    <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer" onClick={() => handleviewSelctedItems('top')}>view here</div>
+                                    :
+                                    ""
                             }
                         </div>
                         <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl ">
                             <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
                             {
-                                SelectedBottom === '' ? 
-                                <Image src={'/svgs/pants.svg'} alt='image' width={250} height={250} className='object-contain ' />
-                                :
-                                <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                                SelectedBottom === '' ?
+                                    <Image src={'/svgs/pants.svg'} alt='image' width={250} height={250} className='object-contain ' />
+                                    :
+                                    <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
                             }
                             {
-                                SelectView? 
-                                <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer" onClick={()=>handleviewSelctedItems('bottom')}>view here</div>
-                                :
-                                ""
+                                SelectView ?
+                                    <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer" onClick={() => handleviewSelctedItems('bottom')}>view here</div>
+                                    :
+                                    ""
                             }
                         </div>
                     </div>
@@ -207,7 +211,7 @@ const Page = () => {
                                         src={item}
                                         alt={`User Image ${index + 1}`}
                                         className="object-contain w-full h-full"
-                                        onClick={()=>{HandleSelectedItem(item)}}
+                                        onClick={() => { HandleSelectedItem(item) }}
                                     />
                                 </span>
                             ))}

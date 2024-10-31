@@ -125,57 +125,6 @@
   }
  }
 
-
-/* DotsContainer.css */
-.dots-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-}
-
-
-.dot {
-  margin-right: 10px;
-  border-radius: 50%;
-  background-color: #eae3dd;
-  animation: pulse 1.5s infinite ease-in-out;
-}
-.dot:last-child {
-  margin-right: 0;
-}
-.animation-delay-0 {
-  animation-delay: -0.3s;
-}
-.animation-delay-100 {
-  animation-delay: -0.1s;
-}
-.animation-delay-200 {
-  animation-delay: 0.1s;
-}
-.animation-delay-300 {
-  animation-delay: 0.3s;
-}
-.animation-delay-400 {
-  animation-delay: 0.5s;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.5);
-    background-color: #eae3dd;
-  }
-  50% {
-    transform: scale(1.2);
-    background-color: #f5f2f0;
-  }
-  100% {
-    transform: scale(0.5);
-    background-color: #eae3dd;
-  }
-}
-
 .glass {
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);
