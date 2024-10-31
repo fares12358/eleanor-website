@@ -18,7 +18,7 @@ const Hero = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:p-5 overflow-hidden text-my_red">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:p-20 overflow-hidden text-my_red">
       <div className="p-5 flex flex-col justify-center order-2 lg:order-1">
         <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold md:mt-20 leading-tight" >
           Find The Best Fashion Style For You

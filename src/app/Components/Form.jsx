@@ -11,7 +11,7 @@ const Form = () => {
     const { setIsLoged, setUserId } = useContext(UserContext);
     const [mode, setMode] = useState('sign');
     const [viewPas, setViewPas] = useState(false);
-    const [formData, setFormData] = useState({ username: '', password: '', name: '', email: '' });
+    const [formData, setFormData] = useState({ username: 'fares', password: '123456', name: '', email: '' });
     const [errors, setErrors] = useState({ username: '', password: '', name: '', email: '' });
     const [getpassResult, setGetPassResult] = useState('');
     const [isCreated, setIsCreated] = useState(false);

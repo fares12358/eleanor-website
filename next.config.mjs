@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ["localhost"], // Add other domains as needed
+      domains: ["localhost",'storage.googleapis.com'], // Add other domains as needed
     },
   };
   

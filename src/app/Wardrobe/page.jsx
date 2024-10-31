@@ -15,9 +15,12 @@ const Page = () => {
     const [KeyCATegory, setKeyCATegory] = useState('')
     const [view, setView] = useState(false);
     const [viewItem, setViewItem] = useState(false);
+    const [SelectView, setSelectView] = useState(false)
+    const [SelectedURl, setSelectedURl] = useState('')
+    const [SelectedTop, setSelectedTop] = useState('');
+    const [SelectedBottom, setSelectedBootom] = useState('');
     const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
     const toggleCategoryView = () => setView((prev) => !prev);
-
     const fetchCategories = async () => {
         if (userId) {
             try {
@@ -32,16 +35,15 @@ const Page = () => {
             }
         }
     };
-
     const fetchItemsByCategory = async (catKey) => {
         try {
             setView(false); ////////////////////////////////
-            setViewItem(true);
             setKeyCATegory(catKey);
             const response = await getItemByCat(userId, catKey);
             
             if (response.success) {
                 setItems(response.items);
+                setViewItem(true);
             } else {
                 console.error('Failed to fetch items:', response.message);
             }
@@ -63,6 +65,26 @@ const Page = () => {
         fetchCategories();
     }, [userId, viewUpCat]);
 
+    useEffect(() => {
+        fetchItemsByCategory(KeyCATegory);
+    }, [userId, viewUplImg]);
+
+    const HandleSelectedItem=(urlItem)=>{
+        setSelectView(true);
+        setSelectedURl(urlItem);
+    }
+    const handleviewSelctedItems=(place)=>{
+        if(place === 'top'){
+
+            setSelectedTop(SelectedURl);
+        }else{
+            setSelectedBootom(SelectedURl);
+        }
+
+        setSelectView(false);
+
+
+    }
 
     return (
         !isLoged ?
@@ -108,30 +130,53 @@ const Page = () => {
 
                 </div>
 
-                <div className=" h-full w-full flex flex-col items-center justify-start gap-10 p-5 overflow-y-scroll no_scrollbar relative">
+
+
+                <div className=" h-full w-full flex flex-col items-center justify-start gap-10 p-5 overflow-y-scroll  no_scrollbar relative">
                     <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden ${view ? 'hidden' : 'block'}`} onClick={toggleCategoryView}>
                         <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
                     </div>
 
-                    <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col">
-                        <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative">
-                            <Image src='/svgs/close.svg' alt='close' width={30} height={30} className='cursor-pointer relative z-10' />
-                            <Image src={'/svgs/T-shit.svg'} alt='image' fill className='object-contain' />
+                    <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col items-center justify-center ">
+                        <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
+                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
+                            {
+                                SelectedTop === '' ?
+                                 <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain' />
+                                :
+                                 <Image src={SelectedTop} alt='image' fill className='object-contain' />
+
+                            }
+                            {
+                                SelectView? 
+                                <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer"  onClick={()=>handleviewSelctedItems('top')}>view here</div>
+                                :
+                                ""
+                            }
                         </div>
-                        <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative">
-                            <Image src='/svgs/close.svg' alt='close' width={30} height={30} className='cursor-pointer relative z-10' />
-                            <Image src={'/svgs/pants.svg'} alt='image' fill className='object-contain' />
+                        <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl ">
+                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
+                            {
+                                SelectedBottom === '' ? 
+                                <Image src={'/svgs/pants.svg'} alt='image' width={250} height={250} className='object-contain ' />
+                                :
+                                <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                            }
+                            {
+                                SelectView? 
+                                <div className="text-my_red text-sm font-bold bg-my_light py-1 px-2 absolute rounded-sm cursor-pointer" onClick={()=>handleviewSelctedItems('bottom')}>view here</div>
+                                :
+                                ""
+                            }
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-5 items-center justify-center">
-                        <button className='text-sm bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>Use it</button>
-                        <button className='text-sm bg-my_dark px-4 sm:px-10 py-2 text-my_light rounded-lg'>Clear</button>
-                    </div>
 
                 </div>
+
+
                 <div
-                    className={`transform ${viewItem ? 'translate-x-0' : 'translate-x-full'} my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full absolute top-80px right-0 flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5`}
+                    className={`transform ${viewItem ? 'translate-x-0' : 'translate-x-full'}  my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full absolute md:static top-80px right-0 flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5`}
                 >
                     <Image
                         src='/svgs/close-white.svg'
@@ -162,6 +207,7 @@ const Page = () => {
                                         src={item}
                                         alt={`User Image ${index + 1}`}
                                         className="object-contain w-full h-full"
+                                        onClick={()=>{HandleSelectedItem(item)}}
                                     />
                                 </span>
                             ))}
@@ -169,10 +215,7 @@ const Page = () => {
                     ) : (
                         <h2 className='text-md text-my_light m-auto'>No items</h2>
                     )}
-
-
                 </div>
-
                 {
                     viewUplImg ?
                         <ImageUpload catKey={KeyCATegory} /> : ''
@@ -182,10 +225,6 @@ const Page = () => {
                         <AddCategory />
                         : ''
                 }
-
-
-
-
             </div>
     );
 };
