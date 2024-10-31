@@ -1,12 +1,13 @@
 'use client';
 import Image from 'next/image';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { getCategories, getItemByCat } from '../db/main';
 import { UserContext } from '../Components/UserContext';
 import { useSearchParams } from 'next/navigation';
 import ImageUpload from '../Components/ImageUpload';
 import Link from 'next/link';
 import AddCategory from '../Components/AddCategory';
+import LoadingSpinner from '../Components/LoadingSpinner';
 
 const Page = () => {
     const { isLoged, userId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat } = useContext(UserContext);
@@ -139,12 +140,15 @@ const Page = () => {
 
                     <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col items-center justify-center ">
                         <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
-                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
                             {
                                 SelectedTop === '' ?
                                     <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain' />
                                     :
-                                    <Image src={SelectedTop} alt='image' fill className='object-contain' />
+                                    <>
+                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={()=>{setSelectedTop('')}}/>
+                                        <Image src={SelectedTop} alt='image' fill className='object-contain' />
+                                    </>
+
 
                             }
                             {
@@ -155,12 +159,14 @@ const Page = () => {
                             }
                         </div>
                         <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl ">
-                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' />
                             {
                                 SelectedBottom === '' ?
                                     <Image src={'/svgs/pants.svg'} alt='image' width={250} height={250} className='object-contain ' />
                                     :
-                                    <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                                    <>
+                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={()=>{setSelectedBootom('')}} />
+                                        <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                                    </>
                             }
                             {
                                 SelectView ?
@@ -203,18 +209,21 @@ const Page = () => {
                                     key={item.id || index}
                                     className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-xl'
                                 >
-                                    <img
-                                        src={item}
-                                        alt={`User Image ${index + 1}`}
-                                        className="object-contain w-full h-full"
-                                        onClick={() => { HandleSelectedItem(item) }}
-                                    />
+                                    <Suspense fallback={<LoadingSpinner />}>
+                                        <img
+                                            src={item}
+                                            alt={`User Image ${index + 1}`}
+                                            className="object-contain w-full h-full"
+                                            onClick={() => { HandleSelectedItem(item) }}
+                                        />
+                                    </Suspense>
                                 </span>
                             ))}
                         </div>
                     ) : (
                         <h2 className='text-md text-my_light m-auto'>No items</h2>
                     )}
+
                 </div>
                 {
                     viewUplImg ?
