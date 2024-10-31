@@ -121,15 +121,23 @@ const Page = () => {
                         <span>Used</span>
                     </div>
                     <ul className='flex flex-col gap-2 h-full w-full  overflow-auto no_scrollbar list-none cursor-pointer py-5 my-5 border-y border-my_light'>
-                        {categories.map((item, index) => (
+                        {categories.length !== 0 ?
+                            categories.map((item, index) => (
+                                <li
+                                    key={index}
+                                    className='text-xs lg:text-md font-bold py-2 pl-5 uppercase  text-my_red bg-my_light '
+                                    onClick={() => fetchItemsByCategory(item)}
+                                >
+                                    {item}
+                                </li>
+                            ))
+                            :
                             <li
-                                key={index}
-                                className='text-xs lg:text-md font-bold py-2 pl-5 uppercase  text-my_red bg-my_light '
-                                onClick={() => fetchItemsByCategory(item)}
+                                className='text-xs lg:text-md font-bold py-2 pl-5 text-my_light'
                             >
-                                {item}
+                                No Category Add One
                             </li>
-                        ))}
+                        }
                     </ul>
 
                 </div>
