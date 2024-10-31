@@ -145,8 +145,10 @@ const Page = () => {
                                     <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain ' />
                                     :
                                     <>
-                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={()=>{setSelectedTop('')}}/>
-                                        <Image src={SelectedTop} alt='image' fill className='object-contain' />
+                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={() => { setSelectedTop('') }} />
+                                        <Suspense fallback={<LoadingSpinner />}>
+                                            <Image src={SelectedTop} alt='image' fill className='object-contain' />
+                                        </Suspense>
                                     </>
 
 
@@ -164,8 +166,10 @@ const Page = () => {
                                     <Image src={'/svgs/pants2.svg'} alt='image' width={250} height={250} className='object-contain ' />
                                     :
                                     <>
-                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={()=>{setSelectedBootom('')}} />
-                                        <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10 absolute top-1 left-1' onClick={() => { setSelectedBootom('') }} />
+                                        <Suspense fallback={<LoadingSpinner />}>
+                                            <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
+                                        </Suspense>
                                     </>
                             }
                             {
