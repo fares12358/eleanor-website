@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { Suspense, useContext, useEffect, useState } from 'react';
-import { deleteItem, getCategories, getItemByCat } from '../db/main';
+import { addToUsed, deleteItem, getCategories, getItemByCat, getUsedItems } from '../db/main';
 import { UserContext } from '../Components/UserContext';
 import { useSearchParams } from 'next/navigation';
 import ImageUpload from '../Components/ImageUpload';
@@ -20,10 +20,9 @@ const Page = () => {
     const [SelectedURl, setSelectedURl] = useState('');
     const [SelectedTop, setSelectedTop] = useState('');
     const [SelectedBottom, setSelectedBootom] = useState('');
-
+    const [viewUsedItems, setViewUsedItems] = useState(false);
     // Toggle visibility of the category list
     const toggleCategoryView = () => setView((prev) => !prev);
-
     // Fetch categories for the user if userId is available
     const fetchCategories = async () => {
         if (!userId) return;
@@ -37,10 +36,10 @@ const Page = () => {
         } catch (error) {
         }
     };
-
     // Fetch items for a selected category and toggle item view
     const fetchItemsByCategory = async (catKey) => {
         try {
+            setViewUsedItems(false)
             setView(false);
             setKeyCATegory(catKey);
 
@@ -53,33 +52,27 @@ const Page = () => {
         } catch (error) {
         }
     };
-
     // Show upload item view if a category is selected
     const handleAddItem = () => {
         if (KeyCATegory) setViewUplImg(true);
     };
-
     // Show upload category view if the user is logged in
     const handleAddCat = () => {
         if (isLoged && userId) setViewUpCat(true);
     };
-
     // Fetch categories whenever userId or viewUpCat changes
     useEffect(() => {
         fetchCategories();
     }, [userId, viewUpCat]);
-
     // Fetch items whenever userId or viewUplImg changes
     useEffect(() => {
         if (KeyCATegory) fetchItemsByCategory(KeyCATegory);
     }, [userId, viewUplImg]);
-
     // Handle selected item URL and display in specified position
     const HandleSelectedItem = (urlItem) => {
         setSelectView(true);
         setSelectedURl(urlItem);
     };
-
     const handleviewSelctedItems = (place) => {
         if (place === 'top') {
             setSelectedTop(SelectedURl);
@@ -96,10 +89,54 @@ const Page = () => {
                 fetchItemsByCategory(KeyCATegory);
             }
         } catch (error) {
-            console.log(error);
         }
     };
-
+    const handleAddToUse = async (topUrl, BottomUrl) => {
+        try {
+            const date = new Date();
+            const response = await addToUsed(userId, topUrl, BottomUrl, date);
+            if (response.success) {
+            } else {
+            }
+        } catch (error) {
+            console.error("Error in handleAddToUse:", error.message);
+        }
+    };
+    const fetchUsedItems = async () => {
+        try {
+            const response = await getUsedItems(userId); // Make sure userId is defined in the context
+            if (response.success) {
+                setViewUsedItems(true);
+                setViewItem(true);
+                setView(false);
+                setItems(response.data.items); // Assuming `response.data` contains the items
+            } else {
+                setError(response.message);
+            }
+        } catch (error) {
+        }
+    };
+    const [DateUsed, setDateUsed] = useState('');
+    const HandleViewSelected = (topUrl, btmUrl, date) => {
+        setSelectedTop(topUrl);
+        setSelectedBootom(btmUrl);
+        setDateUsed(date);
+    }
+    const [daysAgo, setDaysAgo] = useState('');
+    useEffect(() => {
+        // Function to calculate the difference in days
+        const calculateDaysAgo = () => {
+          const usedDate = new Date(DateUsed); // Convert the stored date to a Date object
+          const currentDate = new Date(); // Get the current date
+          const timeDifference = currentDate - usedDate; // Calculate time difference in milliseconds
+          const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Convert to days
+    
+          setDaysAgo(daysDifference);
+        };
+    
+        calculateDaysAgo(); // Call the function to perform the calculation
+      }, [DateUsed]); // Dependency array to recalculate if dateUsed changes
+    
 
     return (
         !isLoged ?
@@ -123,11 +160,11 @@ const Page = () => {
                         <span className='text-[10px]'>Add Category</span>
                     </div>
 
-                    <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5 uppercase flex items-center justify-start gap-2">
+                    <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5 uppercase flex items-center justify-start gap-2" >
                         <Image src='/svgs/stare.svg' alt='stare' width={15} height={15} />
                         <span>Favorite</span>
                     </div>
-                    <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5  uppercase flex items-center justify-start gap-2 mt-2">
+                    <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5  uppercase flex items-center justify-start gap-2 mt-2" onClick={fetchUsedItems}>
                         <Image src='/svgs/used-black.svg' alt='used' width={15} height={15} />
                         <span>Used</span>
                     </div>
@@ -152,6 +189,8 @@ const Page = () => {
                     </ul>
 
                 </div>
+
+
                 <div className=" h-full w-full flex flex-col items-center justify-start gap-10 p-5 overflow-y-scroll  no_scrollbar relative">
                     <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden ${view ? 'hidden' : 'block'}`} onClick={toggleCategoryView}>
                         <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
@@ -159,17 +198,28 @@ const Page = () => {
 
                     <div className="rounded-xl p-5 pt-10 md:pt-5 gap-2 flex flex-col items-center justify-center">
                         {SelectedTop !== '' && SelectedBottom !== '' ?
-                            <div className="flex items-center justify-around gap-3 w-full my-5 ">
-                                <div className="flex items-center justify-center gap-2 bg-my_dark px-4 py-1 rounded-[5px] cursor-pointer">
-                                    <Image src={'/svgs/used.svg'} alt='add' width={20} height={20} title='add to used' />
-                                    <span className='text-xs text-my_light'>use it</span>
-                                </div>
-                                <div className="flex items-center justify-center gap-2 bg-my_dark px-4 py-1 rounded-[5px] cursor-pointer">
-                                    <Image src={'/svgs/isFav.svg'} alt='add' width={20} height={20} title='add to favourite' />
-                                    <span className='text-xs  text-my_light'>add favourite</span>
-                                </div>
-                            </div> 
-                            : 
+                            <div className="flex flex-col md:flex-row items-center justify-around gap-3 w-full my-5">
+                                {
+                                    viewUsedItems ?
+                                        <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0">
+                                            <Image src={'/svgs/used.svg'} alt='add' width={20} height={20} title='add to used' />
+                                            <span className='sm:text-md text-xs text-my_light'>used {daysAgo} days ago</span>
+                                        </div>
+                                        :
+                                        <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0" onClick={() => { handleAddToUse(SelectedTop, SelectedBottom) }}>
+                                            <Image src={'/svgs/used.svg'} alt='add' width={20} height={20} title='add to used' />
+                                            <span className='text-xs text-my_light'>use it</span>
+                                        </div>
+                                }
+                                {
+                                    viewUsedItems ? '' :
+                                        <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0">
+                                            <Image src={'/svgs/isFav.svg'} alt='add' width={20} height={20} title='add to favourite' />
+                                            <span className='text-xs  text-my_light'>add favourite</span>
+                                        </div>
+                                }
+                            </div>
+                            :
                             ''
                         }
                         <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
@@ -178,16 +228,21 @@ const Page = () => {
                                     <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain ' />
                                     :
                                     <>
-                                        <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
-                                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelectedTop('') }} />
-                                            <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { handleDeleteItem(SelectedTop); setSelectedTop('') }} />
-                                        </div>
+                                        {
+                                            viewUsedItems ?
+                                                ''
+                                                :
+                                                <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
+                                                    <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelectedTop('') }} />
+                                                    <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { handleDeleteItem(SelectedTop); setSelectedTop('') }} />
+                                                </div>
+                                        }
+
+
                                         <Suspense fallback={<LoadingSpinner />}>
                                             <Image src={SelectedTop} alt='image' fill className='object-contain' />
                                         </Suspense>
                                     </>
-
-
                             }
                             {
                                 SelectView ?
@@ -202,10 +257,17 @@ const Page = () => {
                                     <Image src={'/svgs/pants2.svg'} alt='image' width={250} height={250} className='object-contain ' />
                                     :
                                     <>
-                                        <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
-                                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10' onClick={() => { setSelectedBootom('') }} />
-                                            <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20' onClick={() => { handleDeleteItem(SelectedBottom); setSelectedBootom('') }} />
-                                        </div>
+                                        {
+                                            viewUsedItems ?
+                                                ''
+                                                :
+                                                <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
+                                                    <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10' onClick={() => { setSelectedBootom('') }} />
+                                                    <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20' onClick={() => { handleDeleteItem(SelectedBottom); setSelectedBootom('') }} />
+                                                </div>
+                                        }
+
+
                                         <Suspense fallback={<LoadingSpinner />}>
                                             <Image src={SelectedBottom} alt='image' fill className='object-contain ' />
                                         </Suspense>
@@ -224,6 +286,7 @@ const Page = () => {
                 </div>
 
 
+
                 <div
                     className={`transform ${viewItem ? 'translate-x-0' : 'translate-x-full'}  my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full absolute md:static top-80px right-0 flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5`}
                 >
@@ -236,37 +299,73 @@ const Page = () => {
                         onClick={() => setViewItem(false)}
                     />
                     <h2 className="text-sm lg:text-xl text-my_light text-center py-3 mt-8 sm:mt-0 uppercase font-semibold">Items</h2>
-
-                    <div
-                        className="py-2 cursor-pointer flex items-center justify-center gap-2 text-my_red bg-my_light uppercase mx-2 "
-                        onClick={handleAddItem}
-                    >
-                        <Image src='/svgs/add.svg' alt='Add item' width={15} height={15} />
-                        <span className='text-[10px]'>Add Items</span>
-                    </div>
+                    {
+                        viewUsedItems ?
+                            ''
+                            :
+                            <div
+                                className="py-2 cursor-pointer flex items-center justify-center gap-2 text-my_red bg-my_light uppercase mx-2 "
+                                onClick={handleAddItem}
+                            >
+                                <Image src='/svgs/add.svg' alt='Add item' width={15} height={15} />
+                                <span className='text-[10px]'>Add Items</span>
+                            </div>
+                    }
 
                     {items.length > 0 ? (
-                        <div className='flex flex-col gap-2 items-start h-full w-full overflow-auto no_scrollbar list-none cursor-pointer py-5 my-5 border-y border-my_light'>
-                            {items.map((item, index) => (
-                                <span
-                                    key={item.id || index}
-                                    className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-xl'
-                                >
-                                    <Suspense fallback={<LoadingSpinner />}>
-                                        <img
-                                            src={item}
-                                            alt={`User Image ${index + 1}`}
-                                            className="object-contain w-full h-full"
-                                            onClick={() => { HandleSelectedItem(item) }}
-                                        />
-                                    </Suspense>
-                                </span>
-                            ))}
-                        </div>
+                        viewUsedItems ?
+                            <div className='flex flex-col gap-2 items-start h-full w-full overflow-auto no_scrollbar list-none cursor-pointer py-5 my-5 border-y border-my_light'>
+                                {items.map((item, index) => (
+                                    <div className="flex flex-col items-center justify-center self-center" onClick={() => HandleViewSelected(item[0], item[1], item[2])} >
+                                        <span
+                                            key={index}
+                                            className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-t-xl'
+                                        >
+                                            <Suspense fallback={<LoadingSpinner />}>
+                                                <img
+                                                    src={item[0]}
+                                                    alt={`User Image ${index + 1}`}
+                                                    className="object-contain w-full h-full"
+                                                />
+                                            </Suspense>
+                                        </span>
+                                        <span
+                                            key={index + 1}
+                                            className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-b-xl'
+                                        >
+                                            <Suspense fallback={<LoadingSpinner />}>
+                                                <img
+                                                    src={item[1]}
+                                                    alt={`User Image ${index + 1}`}
+                                                    className="object-contain w-full h-full"
+                                                />
+                                            </Suspense>
+                                        </span>
+                                    </div>
+
+                                ))}
+                            </div>
+                            :
+                            <div className='flex flex-col gap-2 items-start h-full w-full overflow-auto no_scrollbar list-none cursor-pointer py-5 my-5 border-y border-my_light'>
+                                {items.map((item, index) => (
+                                    <span
+                                        key={item.id || index}
+                                        className='relative mx-auto bg-my_light lg:w-[150px] lg:h-[150px] md:w-[100px] md:h-[100px] w-[80px] h-[80px] cursor-pointer rounded-xl'
+                                    >
+                                        <Suspense fallback={<LoadingSpinner />}>
+                                            <img
+                                                src={item}
+                                                alt={`User Image ${index + 1}`}
+                                                className="object-contain w-full h-full"
+                                                onClick={() => { HandleSelectedItem(item) }}
+                                            />
+                                        </Suspense>
+                                    </span>
+                                ))}
+                            </div>
                     ) : (
                         <h2 className='text-md text-my_light m-auto'>No items</h2>
                     )}
-
                 </div>
                 {
                     viewUplImg ?

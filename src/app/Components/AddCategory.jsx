@@ -22,6 +22,7 @@ const AddCategory = () => {
             if (response.success) {
                 setError('Category added successfully!'); // Display success message
                 // Optionally, clear the input field or update state
+                setCatNamIN('');
             } else {
                 setError(response.message);
             }

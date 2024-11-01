@@ -136,3 +136,31 @@ export const deleteItem = async (id, catName, url) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
+
+export const addToUsed = async (id, topUrl, btmUrl, dateUse) => {
+    try {
+        const response = await axios.post(`${api}/AddUsedItem`, { id, topUrl, btmUrl, dateUse });
+
+        if (response.data.success) {
+            return { success: true, data: response.data.message };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to add item' };
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
+
+export const getUsedItems = async (id) => {
+    try {
+        const response = await axios.post(`${api}/GetUsedItem`, { id });
+
+        if (response.data.success) {
+            return { success: true, data: response.data };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to fetch items' }; // Changed message for clarity
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
