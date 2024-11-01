@@ -11,6 +11,7 @@ module.exports = {
         my_light:'#eae3dd',
         my_dark:'#5c1819',
         my_red:'#5c1819',
+        my_red2:'#741e20',
       },
       fontFamily: {
         // Adding custom fonts

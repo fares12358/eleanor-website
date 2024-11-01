@@ -150,7 +150,6 @@ export const addToUsed = async (id, topUrl, btmUrl, dateUse) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-
 export const getUsedItems = async (id) => {
     try {
         const response = await axios.post(`${api}/GetUsedItem`, { id });
@@ -159,6 +158,20 @@ export const getUsedItems = async (id) => {
             return { success: true, data: response.data };
         } else {
             return { success: false, message: response.data.message || 'Failed to fetch items' }; // Changed message for clarity
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
+
+export const deleteUsedItems = async (id, topUrl, btmUrl) => {
+    try {
+        const response = await axios.post(`${api}/deleteUsedItem`, { id, topUrl, btmUrl });
+
+        if (response.data.success) {
+            return { success: true, data: response.data.message };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to delete item' };
         }
     } catch (error) {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };

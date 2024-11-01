@@ -3,21 +3,20 @@ import React, { useContext, useState } from 'react'
 import { UserContext } from './UserContext';
 import Image from 'next/image';
 import { addCategory } from '../db/main';
+import LoadingSpinner from './LoadingSpinner';
 
 const AddCategory = () => {
-    // const api = process.env.NEXT_PUBLIC_API_KEY; //back end api
-    const api = 'https://eleanor-website-back-end.vercel.app';
-
     const { userId, viewUpCat, setViewUpCat } = useContext(UserContext);
     const [catNamIN, setCatNamIN] = useState('');
     const [Error, setError] = useState('')
+    const [Loader, setLoader] = useState(false)
     const handleChange = (e) => {
         setCatNamIN(e.target.value);
     }
 
     const handleAddCategory = async () => {
         try {
-            setError('adding...')
+            setLoader(true)
             const response = await addCategory(userId, catNamIN);
             if (response.success) {
                 setError('Category added successfully!'); // Display success message
@@ -28,6 +27,8 @@ const AddCategory = () => {
             }
         } catch (error) {
             setError('Error adding category');
+        } finally {
+            setLoader(false);
         }
     };
 
@@ -48,8 +49,17 @@ const AddCategory = () => {
                     <label htmlFor="catName" className='font-bold'>your category name</label>
                     <input onChange={handleChange} value={catNamIN} type="text" name='catName' className='bg-transparent border-2 border-my_light px-2 py-1 focus:outline-none outline-none  rounded-md ' />
                 </div>
-                {Error}
-                <button onClick={handleSubmit} className="bg-my_light w-fit text-my_dark font-bold px-8 py-1 rounded-md uppercase">add</button>
+                {
+                    Loader ?
+                        <div className="bg-my_light relative h-[40px] w-[100px] rounded-md ">
+                            <LoadingSpinner />
+                        </div>
+                        :
+                        <>
+                            {Error}
+                            <button onClick={handleSubmit} className="bg-my_light w-fit text-my_dark font-bold px-8 py-1 rounded-md uppercase">add</button>
+                        </>
+                }
             </div>
         </div>
     )
