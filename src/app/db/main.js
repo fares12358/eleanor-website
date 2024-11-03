@@ -69,31 +69,46 @@ export const getForgetPass = async (name) => {
         }
     }
 };
+export const addCategory = async (id, catName,selectedOption) => {
+    try {
+        const response = await axios.post(`${api}/addCategory`, { id, catName ,selectedOption});
+        
+        if (response.data.success) {
+            return { success: true, data: response.data };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to add category' };
+        }
+    } catch (error) {
+        return { success: false, message: error.message || 'Internal error' };
+    }
+};
 // Function to get cat user
+
 export const getCategories = async (id) => {
     try {
         const response = await axios.post(`${api}/getCat`, {
-           id
-          });
+            id // Send user ID in request
+        });
+
         if (response.data.success) {
-            return { success: true, cat: response.data.cat }; // Return success with categories
+            return { success: true, cat: response.data.categories }; // Return success with categories
         } else {
             return { success: false, message: response.data.message }; // Return failure with message
         }
     } catch (error) {
         if (error.response) {
-            return { success: false, message: error.response.data.message }; // Return failure with message
+            return { success: false, message: error.response.data.message }; // Return failure with server message
         } else {
-            return { success: false, message: 'An error occurred. Please try again.' }; // Return general error message
+            return { success: false, message: 'An error occurred. Please try again.' }; // General error message
         }
     }
 };
 // Function to get item by cat key
-export const getItemByCat = async (id, catKey) => {
+export const getItemByCat = async (id, CatRef) => {
     try {
         const response = await axios.post(`${api}/getItems`, {
             id,
-            catKey, // Ensure this matches the key you are sending to the backend
+            CatRef, // Ensure this matches the key you are sending to the backend
         });
 
         if (response.data.success) {
@@ -109,23 +124,9 @@ export const getItemByCat = async (id, catKey) => {
         }
     }
 };
-export const addCategory = async (id, catName) => {
+export const deleteItem = async (id,itemIndex, catIndex) => {
     try {
-        const response = await axios.post(`${api}/addCategory`, { id, catName });
-        
-        if (response.data.success) {
-            return { success: true, data: response.data };
-        } else {
-            return { success: false, message: response.data.message || 'Failed to add category' };
-        }
-    } catch (error) {
-        return { success: false, message: error.message || 'Internal error' };
-    }
-};
-
-export const deleteItem = async (id, catName, url) => {
-    try {
-        const response = await axios.post(`${api}/deleteItem`, { id, catName, url });
+        const response = await axios.post(`${api}/deleteItem`, {id, itemIndex, catIndex});
 
         if (response.data.success) {
             return { success: true, data: response.data.message };
@@ -136,10 +137,9 @@ export const deleteItem = async (id, catName, url) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-
-export const addToUsed = async (id, topUrl, btmUrl, dateUse) => {
+export const addToUsed = async (id, topItem, bottomItem) => {
     try {
-        const response = await axios.post(`${api}/AddUsedItem`, { id, topUrl, btmUrl, dateUse });
+        const response = await axios.post(`${api}/AddUsedItem`, { id, topItem, bottomItem });
 
         if (response.data.success) {
             return { success: true, data: response.data.message };
@@ -150,6 +150,7 @@ export const addToUsed = async (id, topUrl, btmUrl, dateUse) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const getUsedItems = async (id) => {
     try {
         const response = await axios.post(`${api}/GetUsedItem`, { id });
@@ -163,7 +164,6 @@ export const getUsedItems = async (id) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-
 export const deleteUsedItems = async (id, topUrl, btmUrl) => {
     try {
         const response = await axios.post(`${api}/deleteUsedItem`, { id, topUrl, btmUrl });

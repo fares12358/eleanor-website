@@ -42,6 +42,7 @@ const Nav = () => {
     e.preventDefault();
     setIsLoged(false);
     setUserId(null);
+    setview(false);
   };
 
 

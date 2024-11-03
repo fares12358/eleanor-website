@@ -5,13 +5,14 @@ import { UserContext } from './UserContext';
 import Image from 'next/image';
 import LoadingSpinner from './LoadingSpinner';
 
-const ImageUpload = (props) => {
+const ImageUpload = () => {
   const [image, setImage] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   const [Loader, setLoader] = useState(false)
-  const { userId, viewUplImg, setViewUplImg } = useContext(UserContext);
+  const { userId, viewUplImg, setViewUplImg,items,REF } = useContext(UserContext);
   const api = process.env.NEXT_PUBLIC_API_KEY; // Change this to your backend API when deployed
-
+  console.log(REF);
+  
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
 
@@ -49,8 +50,7 @@ const ImageUpload = (props) => {
         return;
       }
       setStatusMessage('uploading...');
-
-      const response = await axios.post(`${api}/uploadImage/${userId}/${props.catKey}`, formData);
+      const response = await axios.post(`${api}/uploadImage/${userId}/${REF}`, formData);
 
       setStatusMessage(response.data.message); // Display success message
       setImage(null); // Reset the image state
@@ -60,7 +60,6 @@ const ImageUpload = (props) => {
       setLoader(false);
     }
   };
-
   return (
     <div className={`${viewUplImg ? 'flex' : 'hidden'} w-full h-full absolute top-0 left-0 items-center justify-center glass z-50`}>
       <div className="image-upload bg-my_dark w-fit max-w-[90%] p-5 rounded-xl flex flex-col items-center justify-center gap-4 text-my_light relative">
