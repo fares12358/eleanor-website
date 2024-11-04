@@ -150,9 +150,6 @@ export const addToUsed = async (id, item, mode) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const getUsedItems = async (id) => {
     try {
         const response = await axios.post(`${api}/GetUsedItem`, { id });
@@ -166,9 +163,11 @@ export const getUsedItems = async (id) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-export const deleteUsedItems = async (id, topUrl, btmUrl) => {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ReUsedItems = async (id, item,index) => {
     try {
-        const response = await axios.post(`${api}/deleteUsedItem`, { id, topUrl, btmUrl });
+        const response = await axios.post(`${api}/ReUsedItem`, { id, item,index});
 
         if (response.data.success) {
             return { success: true, data: response.data.message };

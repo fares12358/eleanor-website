@@ -6,7 +6,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 
 const RightBar = () => {
-    const { items, itemLoader ,setViewUplImg,REF, setSelectedItem,viewBoth, setviewBoth,ViewRht, setViewRht} = useContext(UserContext);
+    const { items, itemLoader ,setViewUplImg,REF, setSelectedItem,viewBoth, setviewBoth,ViewRht, setViewRht,ViewDetailesBar, setViewDetailesBar ,ViewUsedBar, setViewUsedBar} = useContext(UserContext);
     const HandleSelectedItem = (url, type, itemIndex, catIndex) => {
         setSelectedItem({
             url: url,
@@ -32,7 +32,7 @@ const RightBar = () => {
     return (
         <div
         
-            className={` my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute  ${ViewRht ? 'right-0' : '-right-full'} top-80px  flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
+            className={` ${ViewUsedBar || ViewDetailesBar? 'hidden':'flex'} my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute  ${ViewRht ? 'right-0' : '-right-full'} top-80px  flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
         >
             <Image
                 src='/svgs/close-white.svg'

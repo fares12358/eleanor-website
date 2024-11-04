@@ -7,9 +7,11 @@ import AddCategory from '../Components/AddCategory';
 import RightBar from '../Components/RightBar';
 import ImageUpload from '../Components/ImageUpload';
 import ViewBar from '../Components/ViewBar';
+import DetailsBar from '../Components/DetailsBar';
+import UsedBar from '../Components/UsedBar';
 
 const page = () => {
-    const { isLoged, userId, viewUpCat,viewUplImg } = useContext(UserContext);
+    const { isLoged, userId, viewUpCat, viewUplImg, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);
 
     return (
         !isLoged ?
@@ -20,7 +22,15 @@ const page = () => {
 
             <div className='w-full h-[calc(100vh-80px)] relative font-Frank flex pt-4 overflow-hidden'>
                 <LeftBar />
-                <ViewBar/>
+                {
+                    ViewDetailesBar || ViewUsedBar ?
+                        ViewDetailesBar ?
+                            <DetailsBar />
+                            :
+                            <UsedBar />
+                        :
+                        <ViewBar />
+                }
                 <RightBar />
                 {
                     viewUpCat ?

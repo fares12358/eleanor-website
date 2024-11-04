@@ -24,8 +24,12 @@ export const UserProvider = ({ children }) => {
   const [ViewLeft, setViewLeft] = useState(false);
   const [ViewRht, setViewRht] = useState(false);
 
+  const [ViewDetailesBar, setViewDetailesBar] = useState(false);
+  const [ViewUsedBar, setViewUsedBar] = useState(false);
+
+
   return (
-    <UserContext.Provider value={{ isLoged, setIsLoged, userId, setUserId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat, items, setItems, itemLoader, setItemLoader, REF, setREF, SelectedTop, setSelectedTop, SelectedBottom, setSelectedBottom,selectedItem, setSelectedItem,viewBoth, setviewBoth,Resfetch, setResfetch,ViewLeft, setViewLeft,ViewRht, setViewRht }}>
+    <UserContext.Provider value={{ isLoged, setIsLoged, userId, setUserId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat, items, setItems, itemLoader, setItemLoader, REF, setREF, SelectedTop, setSelectedTop, SelectedBottom, setSelectedBottom,selectedItem, setSelectedItem,viewBoth, setviewBoth,Resfetch, setResfetch,ViewLeft, setViewLeft,ViewRht, setViewRht ,ViewUsedBar, setViewUsedBar,ViewDetailesBar, setViewDetailesBar}}>
       {children}
     </UserContext.Provider>
   );

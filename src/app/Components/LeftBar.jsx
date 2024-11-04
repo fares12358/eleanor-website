@@ -6,7 +6,7 @@ import { getCategories, getItemByCat } from '../db/main';
 import LoadingSpinner from './LoadingSpinner';
 
 const LeftBar = () => {
-    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat,Resfetch ,ViewLeft, setViewLeft,setViewRht} = useContext(UserContext);
+    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat, Resfetch, ViewLeft, setViewLeft, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);
     const [Categories, setCategories] = useState([]);
     const [Loader, setLoader] = useState(false);
 
@@ -37,6 +37,8 @@ const LeftBar = () => {
 
     const fetchItemsByCategore = async (refOfCat) => {
         try {
+            setViewDetailesBar(false);
+            setViewUsedBar(false);
             setItemLoader(true);
             setViewRht(true);
             setViewLeft(false);
@@ -54,8 +56,18 @@ const LeftBar = () => {
     useEffect(() => {
         if (REF !== null)
             fetchItemsByCategore(REF);
-    }, [viewUplImg,Resfetch])
+    }, [viewUplImg, Resfetch])
 
+    const HandleViewUsedBer = () => {
+        setViewLeft(false);
+        setViewUsedBar(true);
+        setViewDetailesBar(false);
+    };
+    const HandleViewDetailsBar = () => {
+        setViewLeft(false);
+        setViewDetailesBar(true);
+        setViewUsedBar(false);
+    };
 
     return (
         <div
@@ -66,7 +78,7 @@ const LeftBar = () => {
                 width={25}
                 height={25}
                 className='cursor-pointer z-30 absolute right-3 top-3 lg:hidden'
-                onClick={()=>setViewLeft(false)}
+                onClick={() => setViewLeft(false)}
             />
 
             <h2 className='text-lg sm:text-2xl self-center my-4 lg:mt-0 mt-8'>Category</h2>
@@ -76,13 +88,13 @@ const LeftBar = () => {
                 <span className='text-[10px]'>Add Category</span>
             </div>
 
-            <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5 uppercase flex items-center justify-start gap-2" >
+            <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5 uppercase flex items-center justify-start gap-2" onClick={HandleViewDetailsBar}>
                 <Image src='/svgs/details.svg' alt='stare' width={15} height={15} />
                 <span>Details</span>
             </div>
 
 
-            <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5  uppercase flex items-center justify-start gap-2 mt-2" >
+            <div className="w-full text-xs  font-bold text-my_red bg-my_light cursor-pointer py-2 px-2 md:px-5  uppercase flex items-center justify-start gap-2 mt-2" onClick={HandleViewUsedBer}>
                 <Image src='/svgs/used.svg' alt='used' width={15} height={15} />
                 <span>Used</span>
             </div>
