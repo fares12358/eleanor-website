@@ -5,8 +5,12 @@ import { UserContext } from './UserContext';
 import { addToUsed, deleteItem } from '../db/main';
 
 const ViewBar = () => {
-    const { userId, SelectedBottom, setSelectedBottom, SelectedTop, setSelectedTop, selectedItem, viewBoth, setviewBoth, setREF,Resfetch, setResfetch  } = useContext(UserContext);
+    // SelectedBottom, setSelectedBottom, SelectedTop, setSelectedTop,
+    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch } = useContext(UserContext);
+    const [SelectedTop, setSelectedTop] = useState(null);
+    const [SelectedBottom, setSelectedBottom] = useState(null);
     const [SelcetedBoth, setSelcetedBoth] = useState(null);
+    const [ItISUsed, setItISUsed] = useState(false);
     const viewItems = (data) => {
         if (data.type === 'top') {
             setSelectedTop(data)
@@ -20,6 +24,7 @@ const ViewBar = () => {
     useEffect(() => {
         if (selectedItem !== null) {
             viewItems(selectedItem);
+            console.log(selectedItem);
         }
     }, [selectedItem]);
 
@@ -41,26 +46,37 @@ const ViewBar = () => {
         };
     }
 
-    const HandleUseItems=async()=>{
-        try{
-            if(viewBoth){
+    const HandleUseItems = async () => {
+        try {
+            if (viewBoth) {
                 console.log(setSelcetedBoth);
-                
-            }else{
-                // const response=await addToUsed(userId,SelectedTop,SelectedBottom);
-                // if(response.success){
-                //     console.log(response);
-                // }
-                console.log(SelectedTop,SelectedBottom);
-
-                
+                const mode = true;
+                const response = await addToUsed(userId, SelcetedBoth, mode);
+                if (response.success) {
+                    console.log(response);
+                }
+            } else {
+                const mode = false;
+                const items = [SelectedTop, SelectedBottom];
+                const response = await addToUsed(userId, items, mode);
+                if (response.success) {
+                    console.log(response);
+                    setItISUsed(true);
+                    setResfetch((prev) => !prev);
+                    setTimeout(() => {
+                        setSelcetedBoth(null)
+                        setSelectedTop(null)
+                        setSelectedBottom(null)
+                    }, 1500);
+                }
             }
-        }catch(error){
+        } catch (error) {
 
         }
-        
     }
-
+    useEffect(() => {
+        setItISUsed(false);
+    }, [SelectedTop, SelectedBottom, SelcetedBoth])
 
     return (
         <div className='h-full w-full overflow-hidden no_scrollbar flex items-center justify-center relative'>
@@ -69,19 +85,20 @@ const ViewBar = () => {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-                {(SelectedTop !== null && SelectedBottom !== null ) || SelcetedBoth !== null ?
+                {(SelectedTop !== null && SelectedBottom !== null) || SelcetedBoth !== null ?
                     <div className="flex flex-col md:flex-row items-center justify-around gap-3 w-full my-5">
                         {
-                                (false) ?
-                                    <div className="flex items-center justify-start md:justify-center gap-2 bg-[#741e20] rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0">
-                                        <Image src={'/svgs/used-white.svg'} alt='add' width={20} height={20} title='add to used' />
-                                        <span className='text-xs text-my_light'>used item</span>
-                                    </div>
-                                    :
-                                    <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0" onClick={HandleUseItems}>
-                                        <Image src={'/svgs/add-used-white.svg'} alt='add' width={20} height={20} title='add to used' />
-                                        <span className='text-xs text-my_light'>use it</span>
-                                    </div>
+                            ItISUsed ?
+                                <div className="flex items-center justify-start md:justify-center gap-2 bg-[#741e20] rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0 opacity-0 translate-y-3 anim-view"
+                                    style={{ animationDelay: "0.1s" }}>
+                                    <Image src={'/svgs/used-white.svg'} alt='add' width={20} height={20} title='add to used' />
+                                    <span className='text-xs text-my_light'>added to used item</span>
+                                </div>
+                                :
+                                <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0" onClick={HandleUseItems}>
+                                    <Image src={'/svgs/add-used-white.svg'} alt='add' width={20} height={20} title='add to used' />
+                                    <span className='text-xs text-my_light'>use it</span>
+                                </div>
                         }
                     </div>
                     :

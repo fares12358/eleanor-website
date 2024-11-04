@@ -137,9 +137,9 @@ export const deleteItem = async (id,itemIndex, catIndex) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-export const addToUsed = async (id, topItem, bottomItem) => {
+export const addToUsed = async (id, item, mode) => {
     try {
-        const response = await axios.post(`${api}/AddUsedItem`, { id, topItem, bottomItem });
+        const response = await axios.post(`${api}/AddUsedItem`, { id, item, mode });
 
         if (response.data.success) {
             return { success: true, data: response.data.message };
@@ -150,6 +150,8 @@ export const addToUsed = async (id, topItem, bottomItem) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const getUsedItems = async (id) => {
     try {

@@ -22,8 +22,6 @@ const LeftBar = () => {
             const response = await getCategories(userId); // Fetch categories from the API
             if (response.success) {
                 setCategories(response.cat); // Use the correct property from the response
-                console.log(response.cat);
-
             } else {
                 console.error("Error fetching categories:", response.message); // Log any error message received from the server
             }
@@ -44,11 +42,8 @@ const LeftBar = () => {
             if (response.success) {
                 setREF(refOfCat);
                 setItems(response.items);
-                console.log('fetche items', response.items);
-
             }
         } catch (error) {
-            console.log(error);
         } finally {
             setItemLoader(false);
         }

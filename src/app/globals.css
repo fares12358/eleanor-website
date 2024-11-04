@@ -285,6 +285,23 @@
   transition: all 0.5s;
 }
 
+.anim-view {
+  animation: viewAnim 1.5s linear forwards;
+}
+@keyframes viewAnim {
+  0%{
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  30%,70% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
 
 
 @layer utilities {
