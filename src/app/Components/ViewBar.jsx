@@ -6,7 +6,7 @@ import { addToUsed, deleteItem } from '../db/main';
 
 const ViewBar = () => {
     // SelectedBottom, setSelectedBottom, SelectedTop, setSelectedTop,
-    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch } = useContext(UserContext);
+    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch ,ViewLeft, setViewLeft} = useContext(UserContext);
     const [SelectedTop, setSelectedTop] = useState(null);
     const [SelectedBottom, setSelectedBottom] = useState(null);
     const [SelcetedBoth, setSelcetedBoth] = useState(null);
@@ -80,7 +80,7 @@ const ViewBar = () => {
 
     return (
         <div className='h-full w-full overflow-hidden no_scrollbar flex items-center justify-center relative'>
-            <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden`}>
+            <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden`} onClick={()=>setViewLeft(true)}>
                 <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
             </div>
 

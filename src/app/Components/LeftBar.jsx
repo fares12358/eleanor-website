@@ -6,7 +6,7 @@ import { getCategories, getItemByCat } from '../db/main';
 import LoadingSpinner from './LoadingSpinner';
 
 const LeftBar = () => {
-    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat,Resfetch, setResfetch } = useContext(UserContext);
+    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat,Resfetch ,ViewLeft, setViewLeft,setViewRht} = useContext(UserContext);
     const [Categories, setCategories] = useState([]);
     const [Loader, setLoader] = useState(false);
 
@@ -38,6 +38,8 @@ const LeftBar = () => {
     const fetchItemsByCategore = async (refOfCat) => {
         try {
             setItemLoader(true);
+            setViewRht(true);
+            setViewLeft(false);
             const response = await getItemByCat(userId, refOfCat);
             if (response.success) {
                 setREF(refOfCat);
@@ -57,13 +59,14 @@ const LeftBar = () => {
 
     return (
         <div
-            className={` py-5 z-30 lg:static my_transition absolute top-80px  w-[150px] sm:w-[200px] lg:w-[250px] bg-my_red text-my_light h-full flex flex-col items-start justify-start font-bold pt-5 rounded-tr-3xl shadow-2xl  p-2`}>
+            className={` py-5 z-30 lg:static my_transition absolute  ${ViewLeft ? 'left-0' : '-left-full'}  top-80px  w-[150px] sm:w-[200px] lg:w-[250px] bg-my_red text-my_light h-full flex flex-col items-start justify-start font-bold pt-5 rounded-tr-3xl shadow-2xl  p-2`}>
             <Image
                 src='/svgs/close-white.svg'
                 alt='close'
                 width={25}
                 height={25}
                 className='cursor-pointer z-30 absolute right-3 top-3 lg:hidden'
+                onClick={()=>setViewLeft(false)}
             />
 
             <h2 className='text-lg sm:text-2xl self-center my-4 lg:mt-0 mt-8'>Category</h2>

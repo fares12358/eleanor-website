@@ -6,7 +6,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 
 const RightBar = () => {
-    const { items, itemLoader ,setViewUplImg,REF, setSelectedItem,viewBoth, setviewBoth } = useContext(UserContext);
+    const { items, itemLoader ,setViewUplImg,REF, setSelectedItem,viewBoth, setviewBoth,ViewRht, setViewRht} = useContext(UserContext);
     const HandleSelectedItem = (url, type, itemIndex, catIndex) => {
         setSelectedItem({
             url: url,
@@ -32,7 +32,7 @@ const RightBar = () => {
     return (
         <div
         
-            className={` my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute top-80px right-0 flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
+            className={` my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute  ${ViewRht ? 'right-0' : '-right-full'} top-80px  flex flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
         >
             <Image
                 src='/svgs/close-white.svg'
@@ -40,7 +40,7 @@ const RightBar = () => {
                 width={25}
                 height={25}
                 className='cursor-pointer z-30 absolute left-3 top-3 lg:hidden'
-                onClick={() => setViewItem(false)}
+                onClick={() => setViewRht(false)}
             />
             <h2 className="text-sm lg:text-xl text-my_light text-center py-3 mt-8 sm:mt-0 uppercase font-semibold">Items</h2>
 
