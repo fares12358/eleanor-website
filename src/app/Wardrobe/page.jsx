@@ -9,6 +9,7 @@ import ImageUpload from '../Components/ImageUpload';
 import ViewBar from '../Components/ViewBar';
 import DetailsBar from '../Components/DetailsBar';
 import UsedBar from '../Components/UsedBar';
+import FlipCard from '../Components/FlipCard';
 
 const page = () => {
     const { isLoged, userId, viewUpCat, viewUplImg, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);

@@ -1,24 +1,61 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from './UserContext';
 import Image from 'next/image';
+import { fetchAllItems } from '../db/main';
+import FlipCard from './FlipCard';
 
 const DetailsBar = () => {
-  const { isLoged, userId ,setViewLeft} = useContext(UserContext);
+  const { isLoged, userId, setViewLeft } = useContext(UserContext);
+  const [AllItem, setAllItem] = useState(null)
+  const HandlefetchAllItems = async () => {
+    try {
+      const response = await fetchAllItems(userId);
+      if (response.success) {
+        setAllItem(response.data.items)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    if (isLoged && userId !== null) {
+      HandlefetchAllItems()
+    }
+  }, [])
 
   return (
-    <div className='border border-black  w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 p-5 overflow-y-auto items-start justify-center'>
+    <div className=' w-full  flex flex-col gap-5 p-5 overflow-y-auto items-start justify-start'>
       <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden mt-5`} onClick={() => setViewLeft(true)}>
         <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
       </div>
-      <div className="shadow-2xl rounded-md h-[400px] w-[250px] mx-auto flex flex-col justify-center items-center p-3 gap-2">
-        <div className=" w-full h-[80%] relative">
-          <img src="https://storage.googleapis.com/eleanor-3aa19.appspot.com/images/1730678693645_Ho-2.webp" alt="image not found" className='object-contain h-full w-full' />
-        </div>
-        <div className="bg-my_dark text-my_light py-2 rounded-md flex items-center justify-center uppercase w-[80%] cursor-pointer">view Details</div>
-      </div>
+      {
+        AllItem !== null && AllItem.length !== 0 ?
+          AllItem.map((cates) => (
+            <>
+
+              <h1 className="text-xl text-my_dark font-bold uppercase">{cates.name}</h1>
+              <div className="border-b border-black  w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 p-5 items-start justify-center">
+                {
+                  cates.urls.length !== 0 ?
+                    cates.urls.map((item) => (
+                      <FlipCard item={item}/>
+                    ))
+                    :
+                    <h2 className=" text-my_dark font-bold sm:text-xl text-sm mx-auto">Empty Category</h2>
+                }
+              </div>
+            </>
+          ))
+          :
+          <h2 className=" text-my_dark font-bold text-xl mx-auto">No Items To View</h2>
+
+      }
+
+
+
 
     </div>
   )
 }
 
-export default DetailsBar
+export default DetailsBar 

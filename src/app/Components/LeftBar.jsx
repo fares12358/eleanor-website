@@ -6,7 +6,7 @@ import { getCategories, getItemByCat } from '../db/main';
 import LoadingSpinner from './LoadingSpinner';
 
 const LeftBar = () => {
-    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat, Resfetch, ViewLeft, setViewLeft, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);
+    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat, Resfetch, ViewLeft, setViewLeft, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar,setSelectedItem } = useContext(UserContext);
     const [Categories, setCategories] = useState([]);
     const [Loader, setLoader] = useState(false);
 
@@ -62,11 +62,14 @@ const LeftBar = () => {
         setViewLeft(false);
         setViewUsedBar(true);
         setViewDetailesBar(false);
+        setSelectedItem(null);
     };
     const HandleViewDetailsBar = () => {
         setViewLeft(false);
         setViewDetailesBar(true);
         setViewUsedBar(false);
+        setSelectedItem(null);
+
     };
 
     return (

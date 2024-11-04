@@ -83,7 +83,6 @@ export const addCategory = async (id, catName,selectedOption) => {
     }
 };
 // Function to get cat user
-
 export const getCategories = async (id) => {
     try {
         const response = await axios.post(`${api}/getCat`, {
@@ -163,8 +162,6 @@ export const getUsedItems = async (id) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 export const ReUsedItems = async (id, item,index) => {
     try {
         const response = await axios.post(`${api}/ReUsedItem`, { id, item,index});
@@ -173,6 +170,20 @@ export const ReUsedItems = async (id, item,index) => {
             return { success: true, data: response.data.message };
         } else {
             return { success: false, message: response.data.message || 'Failed to delete item' };
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const fetchAllItems = async (id) => {
+    try {
+        const response = await axios.post(`${api}/GetAllItem`, { id });
+
+        if (response.data.success) {
+            return { success: true, data: response.data };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to fetch items' }; // Changed message for clarity
         }
     } catch (error) {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };

@@ -17,7 +17,9 @@ const RightBar = () => {
     };
 
     const HandleViewAdd=()=>{
-        setViewUplImg(true);
+        if(REF !== null){
+            setViewUplImg(true);
+        }
     }
     useEffect(() => {
       if(items !== null && items.type === 'both'){
