@@ -10,13 +10,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Image from "next/image";
 import { getUserData } from "../db/main";
+import HandleNotification from "./HandleNotification";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const Nav = () => {
-  const { isLoged, setIsLoged, setUserId, userId, NOtifItems, setNOtifItems, ViewNotfi, setViewNotfi } = useContext(UserContext);
+  const { isLoged, setIsLoged, setUserId, userId, NOtifItems, ViewNotfi, setViewNotfi, setVeiwHandleNot,CatNamForviewNotfi, setCatNamForviewNotfi , setCatItems} = useContext(UserContext);
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
   ]);
@@ -67,6 +68,13 @@ const Nav = () => {
   }, [userId]);
 
 
+  const handleViewNotify=(Catname,Items)=>{
+    setVeiwHandleNot(true);
+    setCatNamForviewNotfi(Catname)
+    setCatItems(Items)
+    console.log(Catname,Items);
+
+  }
 
   return (
     <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
@@ -86,7 +94,7 @@ const Nav = () => {
                     onClick={() => { setViewNotfi(!ViewNotfi) }}
                   />
                   {
-                    NOtifItems !== null && NOtifItems.length !== 0 ?
+                    NOtifItems && Object.keys(NOtifItems).length > 0 ?
                       <span class="flex h-2 w-2 absolute bottom-1 right-0">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-my_dark opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-my_dark"></span>
@@ -163,7 +171,7 @@ const Nav = () => {
                       />
 
                       {
-                        NOtifItems !== null && NOtifItems.length !== 0 ?
+                        NOtifItems && Object.keys(NOtifItems).length > 0 ?
                           <span class="flex h-2 w-2 absolute bottom-2 right-0">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-my_dark opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-my_dark"></span>
@@ -230,8 +238,9 @@ const Nav = () => {
         {NOtifItems && Object.keys(NOtifItems).length > 0 ? (
 
           Object.entries(NOtifItems).map(([key, item], index) => (
-            <div key={index} className="bg-my_light text-my_dark w-full py-2 font-semibold p-1 rounded-sm text-xs sm:text-sm">
-              You have <span className="font-bold">{item.urls.length}</span> items in <span className="font-bold mx-1">{key}</span> from a long time
+            <div key={index} className="bg-my_light text-my_dark w-full p-4 font-semibold  rounded-sm text-xs sm:text-sm flex items-center justify-around flex-wrap gap-1">
+              You have {item.urls.length} items in {key} from a long time
+              <span className="font-bold cursor-pointer text-sm sm:text-md bg-my_dark text-my_light py-1 px-2 rounded-sm" onClick={()=>{handleViewNotify(key,item.urls)}} >view Items</span>
             </div>
           ))
         ) : (
@@ -240,6 +249,10 @@ const Nav = () => {
           </div>
         )}
       </div>
+
+       {
+        <HandleNotification />
+      }
     </Disclosure>
   );
 };

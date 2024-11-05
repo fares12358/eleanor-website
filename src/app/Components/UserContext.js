@@ -32,11 +32,17 @@ export const UserProvider = ({ children }) => {
 
   const [ViewNotfi, setViewNotfi] = useState(false);
 
+  ///////////notification
+  const [VeiwHandleNot, setVeiwHandleNot] = useState(false);
+  const [CatNamForviewNotfi, setCatNamForviewNotfi] = useState(null)
+  const [CatNamItems, setCatItems] = useState(null);
 
+  const [reCalNotif, setreCalNotif] = useState(false);
 
 
   return (
-    <UserContext.Provider value={{ isLoged, setIsLoged, userId, setUserId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat, items, setItems, itemLoader, setItemLoader, REF, setREF, SelectedTop, setSelectedTop, SelectedBottom, setSelectedBottom, selectedItem, setSelectedItem, viewBoth, setviewBoth, Resfetch, setResfetch, ViewLeft, setViewLeft, ViewRht, setViewRht, ViewUsedBar, setViewUsedBar, ViewDetailesBar, setViewDetailesBar, NOtifItems, setNOtifItems, ViewNotfi, setViewNotfi }}>
+    <UserContext.Provider value={
+      { isLoged, setIsLoged, userId, setUserId, viewUplImg, setViewUplImg, viewUpCat, setViewUpCat, items, setItems, itemLoader, setItemLoader, REF, setREF, SelectedTop, setSelectedTop, SelectedBottom, setSelectedBottom, selectedItem, setSelectedItem, viewBoth, setviewBoth, Resfetch, setResfetch, ViewLeft, setViewLeft, ViewRht, setViewRht, ViewUsedBar, setViewUsedBar, ViewDetailesBar, setViewDetailesBar, NOtifItems, setNOtifItems, ViewNotfi, setViewNotfi, CatNamForviewNotfi, setCatNamForviewNotfi, CatNamItems, setCatItems,VeiwHandleNot, setVeiwHandleNot,reCalNotif, setreCalNotif }}>
       {children}
     </UserContext.Provider>
   );
