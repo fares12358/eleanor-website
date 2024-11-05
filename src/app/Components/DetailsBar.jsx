@@ -6,12 +6,14 @@ import FlipCard from './FlipCard';
 
 const DetailsBar = () => {
   const { isLoged, userId, setViewLeft } = useContext(UserContext);
-  const [AllItem, setAllItem] = useState(null)
+  const [AllItem, setAllItem] = useState(null);
   const HandlefetchAllItems = async () => {
     try {
       const response = await fetchAllItems(userId);
       if (response.success) {
         setAllItem(response.data.items)
+        console.log(response.data.items);
+        
       }
     } catch (error) {
       console.log(error);

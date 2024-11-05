@@ -175,10 +175,24 @@ export const ReUsedItems = async (id, item,index) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const fetchAllItems = async (id) => {
     try {
         const response = await axios.post(`${api}/GetAllItem`, { id });
+
+        if (response.data.success) {
+            return { success: true, data: response.data };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to fetch items' }; // Changed message for clarity
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const GetNotification = async (id) => {
+    try {
+        const response = await axios.post(`${api}/GetNotification`, { id });
 
         if (response.data.success) {
             return { success: true, data: response.data };

@@ -16,7 +16,7 @@ function classNames(...classes) {
 }
 
 const Nav = () => {
-  const { isLoged, setIsLoged, setUserId, userId } = useContext(UserContext);
+  const { isLoged, setIsLoged, setUserId, userId, NOtifItems, setNOtifItems, ViewNotfi, setViewNotfi } = useContext(UserContext);
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
   ]);
@@ -45,7 +45,6 @@ const Nav = () => {
     setview(false);
   };
 
-
   const handleView = () => setview((prev) => !prev);
 
   const [username, setUsername] = useState("");
@@ -67,26 +66,55 @@ const Nav = () => {
     handleGetUserData(userId);
   }, [userId]);
 
+
+
   return (
     <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
-          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
+
+          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden gap-2">
             {isLoged && (
-              <div className="relative">
-                <Image
-                  onClick={handleView}
-                  src="/svgs/account.svg"
-                  alt="Logout"
-                  width={30}
-                  height={30}
-                  className="cursor-pointer sm:hidden block z-20 "
-                />
-                <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
-                  <div className="px-4 py-2 text-my_light font-bold">hi {username} ! </div>
-                  <div className="px-4 py-2 text-my_light font-bold" onClick={handleLogOut}>Log out</div>
+              <>
+                <div className="relative">
+                  <Image
+                    src="/svgs/notification.svg"
+                    alt="notf"
+                    width={35}
+                    height={35}
+                    className="cursor-pointer sm:hidden block z-20 "
+                    onClick={() => { setViewNotfi(!ViewNotfi) }}
+                  />
+                  {
+                    NOtifItems !== null && NOtifItems.length !== 0 ?
+                      <span class="flex h-2 w-2 absolute bottom-1 right-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-my_dark opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-my_dark"></span>
+                      </span>
+                      :
+                      ''
+                  }
+
+
                 </div>
-              </div>
+
+                <div className="relative">
+                  <Image
+                    onClick={handleView}
+                    src="/svgs/account.svg"
+                    alt="Logout"
+                    width={30}
+                    height={30}
+                    className="cursor-pointer sm:hidden block z-20 "
+                  />
+                  <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
+                    <div className="px-4 py-2 text-my_light font-bold">hi {username} ! </div>
+                    <div className="px-4 py-2 text-my_light font-bold" onClick={handleLogOut}>Log out</div>
+                  </div>
+                </div>
+
+              </>
+
             )}
             <DisclosureButton
               className="group relative inline-flex items-center justify-center p-2 text-my_red focus:outline-none"
@@ -99,6 +127,8 @@ const Nav = () => {
               />
             </DisclosureButton>
           </div>
+
+
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start px-5 sm:px-0">
             <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
               Eleanor.
@@ -120,20 +150,44 @@ const Nav = () => {
                   </Link>
                 ))}
                 {isLoged ? (
-                  <div className="relative flex items-center justify-center">
-                    <Image
-                      src="/svgs/account.svg"
-                      onClick={handleView}
-                      alt="Logout"
-                      width={30}
-                      height={30}
-                      className="cursor-pointer"
-                    />
-                    <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
-                      <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
-                      <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>Log out</div>
+                  <>
+                    <div className="relative flex items-center justify-center">
+                      <Image
+                        src="/svgs/notification.svg"
+                        alt="notf"
+                        width={35}
+                        height={35}
+                        className="cursor-pointer"
+                        onClick={() => { setViewNotfi(!ViewNotfi) }}
+
+                      />
+
+                      {
+                        NOtifItems !== null && NOtifItems.length !== 0 ?
+                          <span class="flex h-2 w-2 absolute bottom-2 right-0">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-my_dark opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-my_dark"></span>
+                          </span>
+                          :
+                          ''
+                      }
+
                     </div>
-                  </div>
+                    <div className="relative flex items-center justify-center">
+                      <Image
+                        src="/svgs/account.svg"
+                        onClick={handleView}
+                        alt="Logout"
+                        width={30}
+                        height={30}
+                        className="cursor-pointer"
+                      />
+                      <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
+                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
+                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>Log out</div>
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <Link
                     href="/Log"
@@ -170,6 +224,22 @@ const Nav = () => {
           )}
         </div>
       </DisclosurePanel>
+
+
+      <div className={` shadow-2xl border-y border-l border-my_light absolute top-full right-0 flex gap-2 flex-col items-start justify-start bg-my_dark min-w-[200px] min-h-[200px] max-h-[80vh] max-w-[90%] z-20 rounded-bl-xl pt-5 p-3 ${ViewNotfi ? ' translate-x-0' : 'translate-x-full'} my_transition `}>
+        {NOtifItems && Object.keys(NOtifItems).length > 0 ? (
+
+          Object.entries(NOtifItems).map(([key, item], index) => (
+            <div key={index} className="bg-my_light text-my_dark w-full py-2 font-semibold p-1 rounded-sm text-xs sm:text-sm">
+              You have <span className="font-bold">{item.urls.length}</span> items in <span className="font-bold mx-1">{key}</span> from a long time
+            </div>
+          ))
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <h2 className="text-my_light text-md">No items available</h2>
+          </div>
+        )}
+      </div>
     </Disclosure>
   );
 };
