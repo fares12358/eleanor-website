@@ -289,7 +289,7 @@ const Nav = () => {
           </div>
         </div>
       </div>
-      <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light">
+      <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light border border-black">
         <div className="px-2 pb-3 pt-2 text-center bg-my_light my_transition shadow-2xl">
           {navigation.map((item) => (
             <Link

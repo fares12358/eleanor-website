@@ -6,7 +6,7 @@ import { addToUsed, deleteItem } from '../db/main';
 
 const ViewBar = () => {
     // SelectedBottom, setSelectedBottom, SelectedTop, setSelectedTop,
-    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch ,ViewLeft, setViewLeft} = useContext(UserContext);
+    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch, ViewLeft, setViewLeft } = useContext(UserContext);
     const [SelectedTop, setSelectedTop] = useState(null);
     const [SelectedBottom, setSelectedBottom] = useState(null);
     const [SelcetedBoth, setSelcetedBoth] = useState(null);
@@ -74,9 +74,16 @@ const ViewBar = () => {
         setItISUsed(false);
     }, [SelectedTop, SelectedBottom, SelcetedBoth])
 
+    useEffect(() => {
+        setSelcetedBoth(null);
+        setSelectedTop(null);
+        setSelectedBottom(null)
+    }, [viewBoth])
+
+
     return (
         <div className='h-full w-full overflow-hidden no_scrollbar flex items-center justify-center relative'>
-            <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden`} onClick={()=>setViewLeft(true)}>
+            <div className={`my_transition absolute top-0 left-0 p-2 bg-my_red rounded-r-2xl lg:hidden`} onClick={() => setViewLeft(true)}>
                 <Image src='/svgs/left_errow.svg' alt='arrow-view' width={15} height={15} />
             </div>
 
@@ -103,30 +110,30 @@ const ViewBar = () => {
                 {
                     viewBoth ?
 
-                        <div className="md:w-[300px] w-[200px] h-[400px] md:h-[600px] relative flex flex-col  items-center justify-center shadow-xl">
-                            {
-                                SelcetedBoth === null ?
-                                    <Image src={'/svgs/dress.svg'} alt='image' width={200} height={200} className='object-contain ' />
-                                    :
-                                    <>
-                                        <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
-                                            <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelcetedBoth(null) }} />
-                                            <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { HandleDeleteItem(SelcetedBoth) }} />
-                                        </div>
 
-                                        <Suspense fallback={<LoadingSpinner />}>
-                                            <Image src={SelcetedBoth.url} alt='image' fill className='object-contain' />
-                                        </Suspense>
-                                    </>
-                            }
-                        </div>
+                        SelcetedBoth === null ?
+                            ''
+                            :
+                            <>
+                                <div className="md:w-[300px] w-[200px] h-[400px] md:h-[600px] relative flex flex-col  items-center justify-center shadow-xl">
+                                    <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
+                                        <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelcetedBoth(null) }} />
+                                        <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { HandleDeleteItem(SelcetedBoth) }} />
+                                    </div>
+
+                                    <Suspense fallback={<LoadingSpinner />}>
+                                        <Image src={SelcetedBoth.url} alt='image' fill className='object-contain' />
+                                    </Suspense>
+                                </div>
+                            </>
+
                         :
                         <>
-                            <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
-                                {
-                                    SelectedTop === null ?
-                                        <Image src={'/svgs/T-shit.svg'} alt='image' width={200} height={200} className='object-contain ' />
-                                        :
+                            {
+                                SelectedTop === null ?
+                                    ''
+                                    :
+                                    <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl">
                                         <>
                                             <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
                                                 <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-20 ' onClick={() => { setSelectedTop(null) }} />
@@ -137,14 +144,14 @@ const ViewBar = () => {
                                                 <Image src={SelectedTop.url} alt='image' fill className='object-contain' />
                                             </Suspense>
                                         </>
-                                }
-                            </div>
-                            <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl ">
-                                {
-                                    SelectedBottom === null ?
-                                        <Image src={'/svgs/pants2.svg'} alt='image' width={250} height={250} className='object-contain ' />
-                                        :
-                                        <>
+                                    </div>
+                            }
+                            {
+                                SelectedBottom === null ?
+                                    ''
+                                    :
+                                    <>
+                                        <div className="md:w-[300px] w-[200px] h-[200px] md:h-[300px] relative flex flex-col  items-center justify-center shadow-xl ">
                                             <div className="list flex flex-col items-center justify-start gap-2 absolute top-0 left-0  z-20">
                                                 <Image src='/svgs/close.svg' alt='close' width={25} height={25} className='cursor-pointer z-10' onClick={() => { setSelectedBottom(null) }} />
                                                 <Image src='/svgs/delete.svg' alt='close' width={25} height={25} className='cursor-pointer z-20' onClick={() => { HandleDeleteItem(SelectedBottom) }} />
@@ -152,9 +159,9 @@ const ViewBar = () => {
                                             <Suspense fallback={<LoadingSpinner />}>
                                                 <Image src={SelectedBottom.url} alt='image' fill className='object-contain ' />
                                             </Suspense>
-                                        </>
-                                }
-                            </div>
+                                        </div>
+                                    </>
+                            }
                         </>
                 }
             </div>

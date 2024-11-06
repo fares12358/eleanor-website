@@ -14,7 +14,6 @@ export default async function RootLayout({ children }) {
         <main className="w-full h-full  mx-auto   bg-my_light overflow-y-scroll overflow-x-hidden no_scrollbar ">
           <UserProvider>
             <Nav />
-
             {children}
           </UserProvider>
         </main>
