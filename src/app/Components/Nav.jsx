@@ -9,15 +9,15 @@ import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Image from "next/image";
-import { getUserData } from "../db/main";
-import HandleNotification from "./HandleNotification";
+import { deleteItemNotiction, GetNotification, getUserData, reusedNotItem } from "../db/main";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const Nav = () => {
-  const { isLoged, setIsLoged, setUserId, userId, NOtifItems, ViewNotfi, setViewNotfi, setVeiwHandleNot,CatNamForviewNotfi, setCatNamForviewNotfi , setCatItems} = useContext(UserContext);
+  const { isLoged, setIsLoged, setUserId, userId, ViewNotfi, setViewNotfi, setVeiwHandleNot, CatNamForviewNotfi, setCatNamForviewNotfi, setCatItems, NOtifItems, setNOtifItems, reCalNotif, setreCalNotif,setViewRht,setItems,setREF,setSelectedItem,setSelectedBottom,setSelectedTop } = useContext(UserContext);
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
   ]);
@@ -37,6 +37,8 @@ const Nav = () => {
         current: item.name === clickedItem.name,
       }))
     );
+    setview(false);
+    setViewNotfi(false);
   };
 
   const handleLogOut = (e) => {
@@ -44,9 +46,21 @@ const Nav = () => {
     setIsLoged(false);
     setUserId(null);
     setview(false);
+    setItems(null);
+    setREF(null)
+    setSelectedItem(null);
+    setSelectedTop(null);
+    setSelectedBottom(null);
+    setNOtifItems(null)
+    setViewNotfi(false)
+    setVeiwHandleNot(false)
+    setCatNamForviewNotfi(null)
+    setCatItems(null)
+    setreCalNotif(false)
+
   };
 
-  const handleView = () => setview((prev) => !prev);
+  const handleView = () => {setview((prev) => !prev); setViewNotfi(false)}
 
   const [username, setUsername] = useState("");
   const handleGetUserData = async (id) => {
@@ -67,21 +81,87 @@ const Nav = () => {
     handleGetUserData(userId);
   }, [userId]);
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  const handleViewNotify=(Catname,Items)=>{
-    setVeiwHandleNot(true);
-    setCatNamForviewNotfi(Catname)
-    setCatItems(Items)
-    console.log(Catname,Items);
 
+  const handleGetNotification = async () => {
+    try {
+      const response = await GetNotification(userId);
+      if (response.success) {
+        if (response.data.items !== null && isLoged) {
+          const Allitems = response.data.items;
+          const currentDate = new Date();
+          const itemsEx = {};
+          Allitems.forEach((itemGroup) => {
+            const { name, type, urls } = itemGroup;
+            const expiredItems = urls.filter((urlItem) => {
+              const itemsDate = new Date(urlItem.dateAdded);
+              const diffInTime = currentDate - itemsDate;
+              const daysAgo = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+              return daysAgo >= 90; // days ex
+            });
+            if (expiredItems.length > 0) {
+              if (!itemsEx[name]) {
+                itemsEx[name] = { type, urls: [] };
+              }
+              itemsEx[name].urls.push(...expiredItems);
+            }
+            if (itemsEx.length !== 0 && itemsEx !== '') {
+
+              setNOtifItems(itemsEx);
+            }
+          });
+        }
+      }
+    } catch (error) {
+    }
   }
+
+  useEffect(() => {
+    if (userId !== null && isLoged) {
+      handleGetNotification();
+    }
+
+  }, [userId, reCalNotif]);
+
+
+
+  const HadleDeletNotItem = async (Catname, item) => {
+    try {
+      const response = await deleteItemNotiction(userId, Catname, item);
+      if (response.success) {
+        setreCalNotif(!reCalNotif);
+      }
+    } catch (error) {
+    }
+  }
+  const handleReUse = async (catName, item) => {
+    try {
+      const response = await reusedNotItem(userId, catName, item);
+      if (response.success) {
+        setreCalNotif(!reCalNotif);
+      }
+    } catch (error) {
+    }
+  }
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
   return (
     <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
 
-          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden gap-2">
+          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden gap-2 ">
             {isLoged && (
               <>
                 <div className="relative">
@@ -91,7 +171,7 @@ const Nav = () => {
                     width={35}
                     height={35}
                     className="cursor-pointer sm:hidden block z-20 "
-                    onClick={() => { setViewNotfi(!ViewNotfi) }}
+                    onClick={() => { setViewNotfi(!ViewNotfi);setview(false) }}
                   />
                   {
                     NOtifItems && Object.keys(NOtifItems).length > 0 ?
@@ -166,7 +246,7 @@ const Nav = () => {
                         width={35}
                         height={35}
                         className="cursor-pointer"
-                        onClick={() => { setViewNotfi(!ViewNotfi) }}
+                        onClick={() => { setViewNotfi(!ViewNotfi);setview(false) }}
 
                       />
 
@@ -218,6 +298,7 @@ const Nav = () => {
               onClick={() => handleClick(item)}
               aria-current={item.current ? "page" : undefined}
               className="block px-3 py-2 text-md font-bold text-my_red"
+
             >
               {item.name}
             </Link>
@@ -234,13 +315,46 @@ const Nav = () => {
       </DisclosurePanel>
 
 
-      <div className={` shadow-2xl border-y border-l border-my_light absolute top-full right-0 flex gap-2 flex-col items-start justify-start bg-my_dark min-w-[200px] min-h-[200px] max-h-[80vh] max-w-[90%] z-20 rounded-bl-xl pt-5 p-3 ${ViewNotfi ? ' translate-x-0' : 'translate-x-full'} my_transition `}>
+      <div
+        className={`shadow-2xl border-y border-l border-my_light absolute top-full right-0 flex flex-col gap-2 items-start bg-my_dark min-w-[200px] min-h-[200px] max-h-[80vh] max-w-[90%] z-20 rounded-bl-xl pt-5 p-3 ${ViewNotfi ? 'translate-x-0' : 'translate-x-full'
+          } my_transition`}
+      >
         {NOtifItems && Object.keys(NOtifItems).length > 0 ? (
+          Object.entries(NOtifItems).map(([key, items], index) => (
+            <div key={index} className=" w-full text-my_light flex flex-col items-center py-5 ">
+              <h2 className=" text-sm self-center uppercase ">{key}</h2>
+              <div className="flex flex-col items-center">
 
-          Object.entries(NOtifItems).map(([key, item], index) => (
-            <div key={index} className="bg-my_light text-my_dark w-full p-4 font-semibold  rounded-sm text-xs sm:text-sm flex items-center justify-around flex-wrap gap-1">
-              You have {item.urls.length} items in {key} from a long time
-              <span className="font-bold cursor-pointer text-sm sm:text-md bg-my_dark text-my_light py-1 px-2 rounded-sm" onClick={()=>{handleViewNotify(key,item.urls)}} >view Items</span>
+                {Array.isArray(items.urls) && items.urls.length > 0 ? (
+                  items.urls.map((item, itemIndex) => (
+                    <div key={itemIndex} className="w-[150px] h-[250px] mx-auto shadow-2xl flex flex-col items-center gap-4 mt-10">
+                      <div className="h-[80%] w-full">
+                        <img src={item.url} alt="notification item" className="w-full h-full object-contain" />
+                      </div>
+                      <div className="flex items-center gap-5">
+                        <div className="relative bg-my_light p-1 rounded-full">
+                          <Image
+                            src="/svgs/delete.svg"
+                            alt="delete"
+                            width={20}
+                            height={20}
+                            className="cursor-pointer"
+                            onClick={() => HadleDeletNotItem(key, item)}
+                          />
+                        </div>
+                        <div
+                          className="bg-my_light px-3 py-1 rounded-sm text-my_dark uppercase text-md cursor-pointer"
+                          onClick={() => handleReUse(key, item)}
+                        >
+                          Reuse it
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full text-center text-my_light text-md">No items available</div>
+                )}
+              </div>
             </div>
           ))
         ) : (
@@ -250,9 +364,11 @@ const Nav = () => {
         )}
       </div>
 
-       {
-        <HandleNotification />
-      }
+
+
+
+
+
     </Disclosure>
   );
 };

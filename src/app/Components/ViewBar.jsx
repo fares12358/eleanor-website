@@ -24,7 +24,6 @@ const ViewBar = () => {
     useEffect(() => {
         if (selectedItem !== null) {
             viewItems(selectedItem);
-            console.log(selectedItem);
         }
     }, [selectedItem]);
 
@@ -49,18 +48,15 @@ const ViewBar = () => {
     const HandleUseItems = async () => {
         try {
             if (viewBoth) {
-                console.log(setSelcetedBoth);
                 const mode = true;
                 const response = await addToUsed(userId, SelcetedBoth, mode);
                 if (response.success) {
-                    console.log(response);
                 }
             } else {
                 const mode = false;
                 const items = [SelectedTop, SelectedBottom];
                 const response = await addToUsed(userId, items, mode);
                 if (response.success) {
-                    console.log(response);
                     setItISUsed(true);
                     setResfetch((prev) => !prev);
                     setTimeout(() => {

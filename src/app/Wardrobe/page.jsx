@@ -14,6 +14,7 @@ import FlipCard from '../Components/FlipCard';
 const page = () => {
     const { isLoged, userId, viewUpCat, viewUplImg, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);
 
+    
     return (
         !isLoged ?
             <div className="w-full h-[calc(100%-80px)] flex items-center justify-center">

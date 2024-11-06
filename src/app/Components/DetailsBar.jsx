@@ -12,11 +12,9 @@ const DetailsBar = () => {
       const response = await fetchAllItems(userId);
       if (response.success) {
         setAllItem(response.data.items)
-        console.log(response.data.items);
         
       }
     } catch (error) {
-      console.log(error);
     }
   }
   useEffect(() => {

@@ -11,7 +11,6 @@ const ImageUpload = () => {
   const [Loader, setLoader] = useState(false)
   const { userId, viewUplImg, setViewUplImg,items,REF } = useContext(UserContext);
   const api = process.env.NEXT_PUBLIC_API_KEY; // Change this to your backend API when deployed
-  console.log(REF);
   
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];

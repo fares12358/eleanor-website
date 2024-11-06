@@ -3,12 +3,10 @@ import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from "./UserContext";
 import { useRouter } from 'next/navigation';
-import { GetNotification } from '../db/main';
 
 const Hero = () => {
 
-  const { isLoged, userId, NOtifItems, setNOtifItems, reCalNotif } = useContext(UserContext);
-  const [notifactionItems, setNotifactionItems] = useState(null);
+  const { isLoged,} = useContext(UserContext);
   const router = useRouter();
 
   const handleTryNow = (e) => {
@@ -19,56 +17,6 @@ const Hero = () => {
       router.push('/Log');
     }
   }
-
-  const handleGetNotification = async () => {
-    try {
-      const response = await GetNotification(userId);
-      if (response.success) {
-        setNotifactionItems(response.data.items);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    if (userId !== null && isLoged) {
-      handleGetNotification();
-    }
-  }, [userId, reCalNotif]);
-
-
-  const handleSetNotification = () => {
-    const currentDate = new Date();
-    const itemsEx = {};
-    notifactionItems.forEach((itemGroup) => {
-      const { name, type, urls } = itemGroup;
-      const expiredItems = urls.filter((urlItem) => {
-        const itemsDate = new Date(urlItem.dateAdded);
-        const diffInTime = currentDate - itemsDate;
-        const daysAgo = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
-        return daysAgo >= 90; // days ex
-      });
-      if (expiredItems.length > 0) {
-        if (!itemsEx[name]) {
-          itemsEx[name] = { type, urls: [] };
-        }
-        itemsEx[name].urls.push(...expiredItems);
-      }
-    });
-    if (itemsEx.length !== 0 && itemsEx !== '') {
-
-      setNOtifItems(itemsEx);
-    }
-    console.log(itemsEx);
-  };
-
-
-  useEffect(() => {
-    if (notifactionItems !== null && isLoged) {
-      handleSetNotification();
-    }
-  }, [notifactionItems]);
 
 
 

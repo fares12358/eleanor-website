@@ -13,11 +13,9 @@ const UsedBar = () => {
       setLoader(true);
       const response = await getUsedItems(userId);
       if (response.success) {
-        console.log(response.data.items);
         setUsedItem(response.data.items)
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setLoader(false);
     }
@@ -33,12 +31,10 @@ const UsedBar = () => {
       setReuseLoader(true);
       const response = await ReUsedItems(userId, item, index);
       if (response.success) {
-        console.log(response);
         FetchUsedItem();
 
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setReuseLoader(false);
     }
