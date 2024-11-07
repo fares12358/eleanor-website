@@ -1,12 +1,12 @@
 'useClient'
 import Image from 'next/image'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { cache, useContext, useEffect, useState } from 'react'
 import { UserContext } from './UserContext';
-import { getCategories, getItemByCat } from '../db/main';
+import { DeleteCategory, getCategories, getItemByCat } from '../db/main';
 import LoadingSpinner from './LoadingSpinner';
 
 const LeftBar = () => {
-    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat, Resfetch, ViewLeft, setViewLeft, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar,setSelectedItem,dataText ,Lang } = useContext(UserContext);
+    const { isLoged, userId, setViewUpCat, setItems, setItemLoader, REF, setREF, viewUplImg, viewUpCat, Resfetch, ViewLeft, setViewLeft, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar, setSelectedItem, dataText, Lang } = useContext(UserContext);
     const [Categories, setCategories] = useState([]);
     const [Loader, setLoader] = useState(false);
 
@@ -71,15 +71,25 @@ const LeftBar = () => {
         setSelectedItem(null);
 
     };
+    const HandleDeleteCategory = async (catName, catRe) => {
+        try {
+            const response = await DeleteCategory(userId, catName);
+            if (response.success) {
+                HandleGetCategories();
+
+            }
+        } catch (error) {
+
+        }
+    }
 
 
-    
 
-  if (!dataText) {
-    return <div >
-      <LoadingSpinner />
-    </div>;
-  }
+    if (!dataText) {
+        return <div >
+            <LoadingSpinner />
+        </div>;
+    }
 
 
     return (
@@ -92,7 +102,7 @@ const LeftBar = () => {
                 height={25}
                 className='cursor-pointer z-30 absolute right-3 top-3 lg:hidden'
                 onClick={() => setViewLeft(false)}
-                dir={ Lang === 'en'? 'ltr' :'rtl'}
+                dir={Lang === 'en' ? 'ltr' : 'rtl'}
             />
 
             <h2 className='text-lg sm:text-2xl self-center my-4 lg:mt-0 mt-8'>{dataText.Category}</h2>
@@ -123,9 +133,10 @@ const LeftBar = () => {
                         Categories.map((item) => (
                             <li
                                 key={item.ref}
-                                className='text-xs lg:text-md font-bold py-2 pl-5 uppercase text-my_red bg-my_light'
+                                className='text-xs lg:text-md font-bold  pl-2 uppercase text-my_red bg-my_light border border-my_light flex items-center justify-start gap-5'
                                 onClick={() => fetchItemsByCategore(item.ref)} // Make sure this is an arrow function
                             >
+                                <div className=" border-r-2 border-my_dark py-2 pr-2 cursor-pointer" onClick={() => { HandleDeleteCategory(item.name, item.ref) }}><Image src={'/svgs/delete.svg'} width={15} height={15} alt='delete' /></div>
                                 {item.name}
                             </li>
                         ))

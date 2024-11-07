@@ -3,19 +3,19 @@ import React from 'react'
 const LoadingSpinner = () => {
     return (
         
-            <div class="spinner center">
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
-                <div class="spinner-blade"></div>
+            <div className="spinner center">
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
+                <div className="spinner-blade"></div>
             </div>
     )
 }

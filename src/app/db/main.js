@@ -217,15 +217,28 @@ export const deleteItemNotiction = async (id,catName, item) => {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
     }
 };
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const reusedNotItem = async (id, catName,item) => {
     try {
         const response = await axios.post(`${api}/ReUsedItemInNot`, { id, catName,item});
-
+        
         if (response.data.success) {
             return { success: true, data: response.data.message };
         } else {
             return { success: false, message: response.data.message || 'Failed to reuse item' };
+        }
+    } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
+    }
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const DeleteCategory = async (id, catName) => {
+    try {
+        const response = await axios.post(`${api}/DeleteCat`, { id, catName});
+        
+        if (response.data.success) {
+            return { success: true, data: response.data.message };
+        } else {
+            return { success: false, message: response.data.message || 'Failed to delete category' };
         }
     } catch (error) {
         return { success: false, message: error.response?.data?.message || error.message || 'Internal error' };
