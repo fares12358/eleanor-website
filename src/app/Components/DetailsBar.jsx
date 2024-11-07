@@ -5,7 +5,7 @@ import { fetchAllItems } from '../db/main';
 import FlipCard from './FlipCard';
 
 const DetailsBar = () => {
-  const { isLoged, userId, setViewLeft } = useContext(UserContext);
+  const { isLoged, userId, setViewLeft ,dataText ,Lang} = useContext(UserContext);
   const [AllItem, setAllItem] = useState(null);
   const HandlefetchAllItems = async () => {
     try {
@@ -17,11 +17,21 @@ const DetailsBar = () => {
     } catch (error) {
     }
   }
+
   useEffect(() => {
     if (isLoged && userId !== null) {
       HandlefetchAllItems()
     }
   }, [])
+
+
+  
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
+
 
   return (
     <div className=' w-full  flex flex-col gap-5 p-5 overflow-y-auto items-start justify-start'>
@@ -41,13 +51,13 @@ const DetailsBar = () => {
                       <FlipCard item={item}/>
                     ))
                     :
-                    <h2 className=" text-my_dark font-bold sm:text-xl text-sm mx-auto">Empty Category</h2>
+                    <h2 className=" text-my_dark font-bold sm:text-xl text-sm mx-auto">{dataText.EmCat} </h2>
                 }
               </div>
             </>
           ))
           :
-          <h2 className=" text-my_dark font-bold text-xl mx-auto">No Items To View</h2>
+          <h2 className=" text-my_dark font-bold text-xl mx-auto">{dataText.NoVw} </h2>
 
       }
 

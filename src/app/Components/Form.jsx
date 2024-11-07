@@ -5,13 +5,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { loginUser, handleCreate, getForgetPass } from '../db/main';
 import ReqLoader from './ReqLoader';
+import LoadingSpinner from './LoadingSpinner';
 
 const Form = () => {
     const router = useRouter();
-    const { setIsLoged, setUserId } = useContext(UserContext);
+    const { setIsLoged, setUserId , dataText ,Lang } = useContext(UserContext);
     const [mode, setMode] = useState('sign');
     const [viewPas, setViewPas] = useState(false);
-    const [formData, setFormData] = useState({ username: '', password: '', name: '', email: '' });
+    const [formData, setFormData] = useState({ username: 'fares', password: '123456', name: '', email: '' });
     const [errors, setErrors] = useState({ username: '', password: '', name: '', email: '' });
     const [getpassResult, setGetPassResult] = useState('');
     const [isCreated, setIsCreated] = useState(false);
@@ -192,14 +193,24 @@ const Form = () => {
             return false;
         }
     };
+
+    
+
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
+
+
     return (
 
         isLoading ?
             <ReqLoader />
             :
-            <form className='flex flex-col items-center gap-5'>
+            <form className='flex flex-col items-center gap-5' dir={ Lang === 'en'? 'ltr' :'rtl'}>
 
-                <h2 className='text-3xl font-bold text-my_red md:mb-5'>Eleanor</h2>
+                <h2 className='text-3xl font-bold text-my_red md:mb-5'>{dataText.logo} </h2>
 
                 <p className='text-my_red font-medium'>
                     {mode === 'create' && (isCreated ? <span className='text-green-600 font-bold'>Account Created!</span> : 'Create your account')}
@@ -207,7 +218,7 @@ const Form = () => {
                 </p>
 
                 <div className="flex flex-col w-fit text-my_red">
-                    <label htmlFor="username" className='font-bold text-md mb-2 uppercase'>Username</label>
+                    <label htmlFor="username" className='font-bold text-md mb-2 uppercase'>{dataText.Username}</label>
                     <div className="relative h-fit w-fit flex justify-center flex-col">
                         <input
                             type="text"
@@ -225,7 +236,7 @@ const Form = () => {
                 {(mode === 'sign' || mode === 'create') && (
                     <>
                         <div className="flex flex-col w-fit text-my_red">
-                            <label htmlFor="password" className='font-bold text-md mb-2 uppercase'>Password</label>
+                            <label htmlFor="password" className='font-bold text-md mb-2 uppercase'>{dataText.Password}</label>
                             <div className="relative h-fit w-fit flex justify-center flex-col">
                                 <input
                                     type={viewPas ? 'text' : 'password'}
@@ -247,7 +258,7 @@ const Form = () => {
                     mode === 'create' ?
                         <>
                             <div className="flex flex-col w-fit text-my_red">
-                                <label htmlFor="name" className='font-bold text-md mb-2 uppercase'>Name</label>
+                                <label htmlFor="name" className='font-bold text-md mb-2 uppercase'>{dataText.Name} </label>
                                 <div className="relative h-fit w-fit flex justify-center flex-col">
                                     <input
                                         type='text'
@@ -262,7 +273,7 @@ const Form = () => {
                                 {errors.name && <div className="text-red-700 font-bold mt-2 text-xs">{errors.name}</div>}
                             </div>
                             <div className="flex flex-col w-fit text-my_red">
-                                <label htmlFor="email" className='font-bold text-md mb-2 uppercase'>Email</label>
+                                <label htmlFor="email" className='font-bold text-md mb-2 uppercase'>{dataText.Email} </label>
                                 <div className="relative h-fit w-fit flex justify-center flex-col">
                                     <input
                                         type='email'
@@ -282,7 +293,7 @@ const Form = () => {
 
                 {mode === 'get' && getpassResult && <div className="text-my_red">Your password is <span className='font-bold underline text-green-600'>{getpassResult}</span></div>}
 
-                {mode === 'sign' && <p className='cursor-pointer underline font-medium text-my_red' onClick={() => setMode('get')}>Forgot password?</p>}
+                {mode === 'sign' && <p className='cursor-pointer underline font-medium text-my_red' onClick={() => setMode('get')}>{dataText.ForgotPassword}?</p>}
 
                 <button className='bg-my_dark text-white px-7 py-3 font-bold text-md rounded-md' onClick={handleSubmit}>
                     {mode === 'sign' ? 'Sign In' : mode === 'get' ? 'Retrieve Password' : 'Create Account'}
@@ -290,11 +301,11 @@ const Form = () => {
 
                 {mode === 'sign' ? (
                     <span className='text-my_red flex gap-3'>
-                        Don't have an account? <p className='underline font-bold cursor-pointer' onClick={() => setMode('create')}>Create one</p>
+                        {dataText.MSGCER} ? <p className='underline font-bold cursor-pointer' onClick={() => setMode('create')}>{dataText.CrOne}</p>
                     </span>
                 ) : (
                     <span className='text-my_red flex gap-3'>
-                        Already have an account? <p className='underline font-bold cursor-pointer' onClick={() => setMode('sign')}>Sign in</p>
+                        {dataText.AlHave} ? <p className='underline font-bold cursor-pointer' onClick={() => setMode('sign')}>{dataText.SigIn}</p>
                     </span>
                 )}
             </form>

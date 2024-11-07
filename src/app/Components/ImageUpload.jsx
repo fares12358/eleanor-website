@@ -9,7 +9,7 @@ const ImageUpload = () => {
   const [image, setImage] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   const [Loader, setLoader] = useState(false)
-  const { userId, viewUplImg, setViewUplImg,items,REF } = useContext(UserContext);
+  const { userId, viewUplImg, setViewUplImg,items,REF,dataText ,Lang } = useContext(UserContext);
   const api = process.env.NEXT_PUBLIC_API_KEY; // Change this to your backend API when deployed
   
   const handleImageChange = (e) => {
@@ -59,6 +59,15 @@ const ImageUpload = () => {
       setLoader(false);
     }
   };
+
+  
+
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
+
   return (
     <div className={`${viewUplImg ? 'flex' : 'hidden'} w-full h-full absolute top-0 left-0 items-center justify-center glass z-50`}>
       <div className="image-upload bg-my_dark w-fit max-w-[90%] p-5 rounded-xl flex flex-col items-center justify-center gap-4 text-my_light relative">
@@ -70,7 +79,7 @@ const ImageUpload = () => {
           className='cursor-pointer z-30 absolute right-3 top-3'
           onClick={() => setViewUplImg(false)}
         />
-        <h2 className="text-xl text-my_light font-bold uppercase mt-4">Upload Image</h2>
+        <h2 className="text-xl text-my_light font-bold uppercase mt-4">{dataText.UpImg}  </h2>
         {
           Loader ?
             <div className="bg-my_light relative h-[50px] w-[200px] rounded-md ">
@@ -85,7 +94,7 @@ const ImageUpload = () => {
                   onChange={handleImageChange}
                   className="max-w-[250px]"
                 />
-                <button type="submit" className="bg-my_light w-fit text-my_dark font-bold px-4 py-1 rounded-md">Upload</button>
+                <button type="submit" className="bg-my_light w-fit text-my_dark font-bold px-4 py-1 rounded-md">{dataText.Upload}  </button>
               </form>
               {statusMessage && <p>{statusMessage}</p>}
             </>

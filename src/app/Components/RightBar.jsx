@@ -6,7 +6,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 
 const RightBar = () => {
-    const { items, itemLoader ,setViewUplImg,REF, setSelectedItem,viewBoth, setviewBoth,ViewRht, setViewRht,ViewDetailesBar, setViewDetailesBar ,ViewUsedBar, setViewUsedBar} = useContext(UserContext);
+    const { items, itemLoader, setViewUplImg, REF, setSelectedItem, viewBoth, setviewBoth, ViewRht, setViewRht, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar, dataText, Lang } = useContext(UserContext);
     const HandleSelectedItem = (url, type, itemIndex, catIndex) => {
         setSelectedItem({
             url: url,
@@ -16,25 +16,36 @@ const RightBar = () => {
         });
     };
 
-    const HandleViewAdd=()=>{
-        if(REF !== null){
+    const HandleViewAdd = () => {
+        if (REF !== null) {
             setViewUplImg(true);
         }
     }
     useEffect(() => {
-      if(items !== null && items.type === 'both'){
+        if (items !== null && items.type === 'both') {
 
-        setviewBoth(true);
-      }else{
-        setviewBoth(false);
-      }
+            setviewBoth(true);
+        } else {
+            setviewBoth(false);
+        }
     }, [items])
-    
+
+
+
+
+    if (!dataText) {
+        return <div >
+            <LoadingSpinner />
+        </div>;
+    }
+
+
 
     return (
         <div
-        
-            className={` ${ViewUsedBar || ViewDetailesBar? 'hidden':'flex'} my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute  ${ViewRht ? 'right-0' : '-right-full'} top-80px  flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
+            dir={Lang === 'en' ? 'ltr' : 'rtl'}
+
+            className={` ${ViewUsedBar || ViewDetailesBar ? 'hidden' : 'flex'} my_transition w-[100px] sm:w-[200px] lg:w-[250px] h-full lg:static absolute  ${ViewRht ? 'right-0' : '-right-full'} top-80px  flex-col bg-my_red z-40 rounded-tl-3xl md:p-5 py-2`}
         >
             <Image
                 src='/svgs/close-white.svg'
@@ -44,7 +55,7 @@ const RightBar = () => {
                 className='cursor-pointer z-30 absolute left-3 top-3 lg:hidden'
                 onClick={() => setViewRht(false)}
             />
-            <h2 className="text-sm lg:text-xl text-my_light text-center py-3 mt-8 sm:mt-0 uppercase font-semibold">Items</h2>
+            <h2 className="text-sm lg:text-xl text-my_light text-center py-3 mt-8 sm:mt-0 uppercase font-semibold">{dataText.Items}</h2>
 
 
             <div
@@ -52,7 +63,7 @@ const RightBar = () => {
                 onClick={HandleViewAdd}
             >
                 <Image src='/svgs/add.svg' alt='Add item' width={15} height={15} />
-                <span className='text-[10px]'>Add Items</span>
+                <span className='text-[10px]'>{dataText.AddItems}</span>
             </div>
 
 
@@ -73,13 +84,13 @@ const RightBar = () => {
                                         src={item.url}
                                         alt={`User Image ${index + 1}`}
                                         className="object-contain w-full h-full"
-                                        onClick={() => { HandleSelectedItem(item.url,items.type,index,REF) }}
+                                        onClick={() => { HandleSelectedItem(item.url, items.type, index, REF) }}
                                     />
                                 </Suspense>
                             </span>
                         ))
                     ) : (
-                        <h2 className='text-md text-my_light m-auto'>No items</h2>
+                        <h2 className='text-md text-my_light m-auto'>{dataText.Noitems}</h2>
                     )
                 )}
 

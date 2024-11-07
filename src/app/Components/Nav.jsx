@@ -10,6 +10,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Image from "next/image";
 import { deleteItemNotiction, GetNotification, getUserData, reusedNotItem } from "../db/main";
+import LoadingSpinner from "./LoadingSpinner";
 
 
 function classNames(...classes) {
@@ -17,9 +18,29 @@ function classNames(...classes) {
 }
 
 const Nav = () => {
-  const { isLoged, setIsLoged, setUserId, userId, ViewNotfi, setViewNotfi, setVeiwHandleNot, CatNamForviewNotfi, setCatNamForviewNotfi, setCatItems, NOtifItems, setNOtifItems, reCalNotif, setreCalNotif,setViewRht,setItems,setREF,setSelectedItem,setSelectedBottom,setSelectedTop } = useContext(UserContext);
+  const { isLoged, setIsLoged, setUserId, userId, ViewNotfi, setViewNotfi, setVeiwHandleNot, CatNamForviewNotfi, setCatNamForviewNotfi, setCatItems, NOtifItems, setNOtifItems, reCalNotif, setreCalNotif, setViewRht, setItems, setREF, setSelectedItem, setSelectedBottom, setSelectedTop, Lang, setLang, dataText, setDataText } = useContext(UserContext);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/lang/${Lang}.json`);
+        const result = await response.json();
+        setDataText(result);
+      } catch (error) {
+      }
+    };
+
+    fetchData();
+  }, [Lang]);
+
+
+
+
+
   const [navigation, setNavigation] = useState([
-    { name: "Home", href: "/", current: true },
+    { name: "home", href: "/", current: true },
   ]);
 
   useEffect(() => {
@@ -60,7 +81,7 @@ const Nav = () => {
 
   };
 
-  const handleView = () => {setview((prev) => !prev); setViewNotfi(false)}
+  const handleView = () => { setview((prev) => !prev); setViewNotfi(false) }
 
   const [username, setUsername] = useState("");
   const handleGetUserData = async (id) => {
@@ -149,16 +170,26 @@ const Nav = () => {
   }
 
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  const handleLang = () => {
+    setLang(Lang === 'en' ? 'ar' : 'en');
+  }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
 
 
 
   return (
-    <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
+    <Disclosure as="nav"  className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
+
         <div className="relative flex h-16 items-center justify-between">
 
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden gap-2 ">
@@ -171,7 +202,7 @@ const Nav = () => {
                     width={35}
                     height={35}
                     className="cursor-pointer sm:hidden block z-20 "
-                    onClick={() => { setViewNotfi(!ViewNotfi);setview(false) }}
+                    onClick={() => { setViewNotfi(!ViewNotfi); setview(false) }}
                   />
                   {
                     NOtifItems && Object.keys(NOtifItems).length > 0 ?
@@ -217,9 +248,15 @@ const Nav = () => {
           </div>
 
 
-          <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start px-5 sm:px-0">
+          <div className="flex flex-1 items-center justify-start sm:items-center sm:justify-start px-1 sm:px-0">
+            <div className=" bg-my_dark w-fit h-fit text-my_light flex items-center justify-center mx-2 rounded-md">
+              <div className="py-1 px-2 uppercase text-xs sm:text-xl flex items-center justify-center gap-2 cursor-pointer" onClick={handleLang}>{Lang}
+                    <Image src={'/svgs/translate.svg'} width={20} height={20} alt="tran"/>
+                    
+              </div>
+            </div>
             <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
-              Eleanor.
+              {dataText.logo}
             </h1>
             <div className="hidden ml-auto sm:block">
               <div className="flex space-x-4">
@@ -246,7 +283,7 @@ const Nav = () => {
                         width={35}
                         height={35}
                         className="cursor-pointer"
-                        onClick={() => { setViewNotfi(!ViewNotfi);setview(false) }}
+                        onClick={() => { setViewNotfi(!ViewNotfi); setview(false) }}
 
                       />
 
@@ -272,7 +309,7 @@ const Nav = () => {
                       />
                       <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
                         <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
-                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>Log out</div>
+                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>{dataText.logout}</div>
                       </div>
                     </div>
                   </>
@@ -281,7 +318,7 @@ const Nav = () => {
                     href="/Log"
                     className="flex items-center justify-center px-6 text-2xl font-medium text-my_red border border-my_red uppercase"
                   >
-                    Login
+                    {dataText.login}
                   </Link>
                 )}
               </div>
@@ -289,7 +326,7 @@ const Nav = () => {
           </div>
         </div>
       </div>
-      <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light border border-black">
+      <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light">
         <div className="px-2 pb-3 pt-2 text-center bg-my_light my_transition shadow-2xl">
           {navigation.map((item) => (
             <Link
@@ -352,14 +389,14 @@ const Nav = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="w-full text-center text-my_light text-md">No items available</div>
+                  <div className="w-full text-center text-my_light text-md">{dataText.NoVw}</div>
                 )}
               </div>
             </div>
           ))
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <h2 className="text-my_light text-md">No items available</h2>
+            <h2 className="text-my_light text-md">{dataText.NoVw}</h2>
           </div>
         )}
       </div>

@@ -6,7 +6,7 @@ import { addToUsed, deleteItem } from '../db/main';
 
 const ViewBar = () => {
     // SelectedBottom, setSelectedBottom, SelectedTop, setSelectedTop,
-    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch, ViewLeft, setViewLeft } = useContext(UserContext);
+    const { userId, selectedItem, viewBoth, setviewBoth, setREF, Resfetch, setResfetch, ViewLeft, setViewLeft,dataText ,Lang } = useContext(UserContext);
     const [SelectedTop, setSelectedTop] = useState(null);
     const [SelectedBottom, setSelectedBottom] = useState(null);
     const [SelcetedBoth, setSelcetedBoth] = useState(null);
@@ -80,6 +80,14 @@ const ViewBar = () => {
         setSelectedBottom(null)
     }, [viewBoth])
 
+    
+
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
+
 
     return (
         <div className='h-full w-full overflow-hidden no_scrollbar flex items-center justify-center relative'>
@@ -95,12 +103,12 @@ const ViewBar = () => {
                                 <div className="flex items-center justify-start md:justify-center gap-2 bg-[#741e20] rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0 opacity-0 translate-y-3 anim-view"
                                     style={{ animationDelay: "0.1s" }}>
                                     <Image src={'/svgs/used-white.svg'} alt='add' width={20} height={20} title='add to used' />
-                                    <span className='text-xs text-my_light'>added to used item</span>
+                                    <span className='text-xs text-my_light'>{dataText.addUsedAnim}  </span>
                                 </div>
                                 :
                                 <div className="flex items-center justify-start md:justify-center gap-2 bg-my_dark rounded-[5px] cursor-pointer w-full h-full py-1 pl-3 md:pl-0" onClick={HandleUseItems}>
                                     <Image src={'/svgs/add-used-white.svg'} alt='add' width={20} height={20} title='add to used' />
-                                    <span className='text-xs text-my_light'>use it</span>
+                                    <span className='text-xs text-my_light'>{dataText.useIt} </span>
                                 </div>
                         }
                     </div>

@@ -4,7 +4,7 @@ import { getUsedItems, ReUsedItems } from '../db/main';
 import LoadingSpinner from './LoadingSpinner';
 import Image from 'next/image';
 const UsedBar = () => {
-  const { isLoged, userId, setViewLeft } = useContext(UserContext);
+  const { isLoged, userId, setViewLeft, dataText, Lang } = useContext(UserContext);
   const [UsedItem, setUsedItem] = useState(null);
   const [Loader, setLoader] = useState(false);
   const [ReuseLoader, setReuseLoader] = useState(false)
@@ -40,6 +40,15 @@ const UsedBar = () => {
     }
   }
 
+
+
+
+  if (!dataText) {
+    return <div >
+      <LoadingSpinner />
+    </div>;
+  }
+
   return (
     ReuseLoader ?
       <div className="w-full h-full bg-my_light relative flex items-center justify-center">
@@ -61,11 +70,11 @@ const UsedBar = () => {
                   <img src={item.item.url} alt="image not found" className='object-contain h-full w-full' />
                 </div>
                 <div className="bg-my_dark text-my_light sm:text-md text-sm py-2 rounded-md flex items-center justify-center uppercase w-[80%] cursor-pointer"
-                  onClick={() => handleReuseItem(item, index)}>re use this item
+                  onClick={() => handleReuseItem(item, index)}>{dataText.Reuse}  
                 </div>
               </div>
             )) :
-            <h2 className=" text-my_dark font-bold text-xl mx-auto">No Items To View</h2>
+            <h2 className=" text-my_dark font-bold text-xl mx-auto">{dataText.NoVw} </h2>
         }
       </div>
 
