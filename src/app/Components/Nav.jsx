@@ -122,7 +122,7 @@ const Nav = () => {
               const itemsDate = new Date(urlItem.dateAdded);
               const diffInTime = currentDate - itemsDate;
               const daysAgo = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
-              return daysAgo >= 90; // days ex
+              return daysAgo >= 0; // days ex
             });
             if (expiredItems.length > 0) {
               if (!itemsEx[name]) {
