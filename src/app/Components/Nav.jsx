@@ -121,8 +121,10 @@ const Nav = () => {
             const expiredItems = urls.filter((urlItem) => {
               const itemsDate = new Date(urlItem.dateAdded);
               const diffInTime = currentDate - itemsDate;
-              const daysAgo = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
-              return daysAgo >= 0; // days ex
+              // const daysAgo = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+              // return daysAgo >= 0; // days ex
+              const minutesAgo = Math.ceil(diffInTime / (1000 * 60));
+              return minutesAgo >= 5; // more than 5 minutes ago
             });
             if (expiredItems.length > 0) {
               if (!itemsEx[name]) {
@@ -188,7 +190,7 @@ const Nav = () => {
 
 
   return (
-    <Disclosure as="nav"  className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
+    <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
 
         <div className="relative flex h-16 items-center justify-between">
@@ -252,8 +254,8 @@ const Nav = () => {
           <div className="flex flex-1 items-center justify-start sm:items-center sm:justify-start px-1 sm:px-0">
             <div className=" bg-my_dark w-fit h-fit text-my_light flex items-center justify-center mx-2 rounded-md">
               <div className="py-1 px-2 uppercase text-xs sm:text-xl flex items-center justify-center gap-2 cursor-pointer" onClick={handleLang}>{Lang}
-                    <Image src={'/svgs/translate.svg'} width={20} height={20} alt="tran"/>
-                    
+                <Image src={'/svgs/translate.svg'} width={20} height={20} alt="tran" />
+
               </div>
             </div>
             <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
@@ -370,7 +372,7 @@ const Nav = () => {
                         <img src={item.url} alt="notification item" className="w-full h-full object-contain" />
                       </div>
                       <div className="flex flex-col items-center  w-full gap-2">
-                      
+
                         <div
                           className="bg-my_light w-full  text-center  rounded-sm text-my_dark uppercase text-md cursor-pointer"
                           onClick={() => HadleDeletNotItem(key, item)}
