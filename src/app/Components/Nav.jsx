@@ -159,6 +159,7 @@ const Nav = () => {
     } catch (error) {
     }
   }
+
   const handleReUse = async (catName, item) => {
     try {
       const response = await reusedNotItem(userId, catName, item);
@@ -354,7 +355,7 @@ const Nav = () => {
 
       <div
         className={`shadow-2xl border-y border-l border-my_light absolute top-full right-0 flex flex-col gap-2 items-start bg-my_dark min-w-[200px] min-h-[200px] max-h-[80vh] max-w-[90%] z-20 rounded-bl-xl pt-5 p-3 ${ViewNotfi ? 'translate-x-0' : 'translate-x-full'
-          } my_transition`}
+          } my_transition overflow-x-auto no_scrollbar`}
       >
         {NOtifItems && Object.keys(NOtifItems).length > 0 ? (
           Object.entries(NOtifItems).map(([key, items], index) => (
@@ -364,23 +365,20 @@ const Nav = () => {
 
                 {Array.isArray(items.urls) && items.urls.length > 0 ? (
                   items.urls.map((item, itemIndex) => (
-                    <div key={itemIndex} className="w-[150px] h-[250px] mx-auto shadow-2xl flex flex-col items-center gap-4 mt-10">
-                      <div className="h-[80%] w-full">
+                    <div key={itemIndex} className="w-[150px] h-[250px] mx-auto shadow-2xl flex flex-col items-center gap-5 mt-10 px-2">
+                      <div className="h-[60%] w-full">
                         <img src={item.url} alt="notification item" className="w-full h-full object-contain" />
                       </div>
-                      <div className="flex items-center gap-5">
-                        <div className="relative bg-my_light p-1 rounded-full">
-                          <Image
-                            src="/svgs/delete.svg"
-                            alt="delete"
-                            width={20}
-                            height={20}
-                            className="cursor-pointer"
-                            onClick={() => HadleDeletNotItem(key, item)}
-                          />
+                      <div className="flex flex-col items-center  w-full gap-2">
+                      
+                        <div
+                          className="bg-my_light w-full  text-center  rounded-sm text-my_dark uppercase text-md cursor-pointer"
+                          onClick={() => HadleDeletNotItem(key, item)}
+                        >
+                          Donate it
                         </div>
                         <div
-                          className="bg-my_light px-3 py-1 rounded-sm text-my_dark uppercase text-md cursor-pointer"
+                          className="bg-my_light  w-full  text-center rounded-sm text-my_dark uppercase text-md cursor-pointer"
                           onClick={() => handleReUse(key, item)}
                         >
                           Reuse it
