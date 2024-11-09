@@ -1,10 +1,16 @@
 {
     "logo":"Eleanor",
-    "home":"home",
+    "home":"Home",
+    "Wardrobe":"Wardrobe",
     "login":"LOGIN",
-    "logout":"Log out",
 
+    "Donate":"Donate it",
 
+    "ReuseIt":"Reuse it",
+
+    "hi":"hi",
+
+    "logout":"log out",
 
     "mainText":"Find The Best Fashion Style For You",
     "disText1":"Eleanor ",
@@ -22,12 +28,19 @@
     "AddItems":"Add Items",
     "Noitems":"No items",
 
+
     "CatName":"your category name",
     "SelOp":"Select an option",
     "Top":"Top",
     "Bottom":"Bottom",
     "Both":"Both",
     "addBtn":"add",
+
+    
+    "AskDlete":"Do you want to delete it ?",
+    "Delete":"Delete",
+    "Cancel":"Cancel",
+    
 
 
 

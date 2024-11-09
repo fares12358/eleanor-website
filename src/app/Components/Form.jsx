@@ -12,7 +12,7 @@ const Form = () => {
     const { setIsLoged, setUserId , dataText ,Lang } = useContext(UserContext);
     const [mode, setMode] = useState('sign');
     const [viewPas, setViewPas] = useState(false);
-    const [formData, setFormData] = useState({ username: '', password: '', name: '', email: '' });
+    const [formData, setFormData] = useState({ username: 'fares', password: '123456', name: '', email: '' });
     const [errors, setErrors] = useState({ username: '', password: '', name: '', email: '' });
     const [getpassResult, setGetPassResult] = useState('');
     const [isCreated, setIsCreated] = useState(false);
@@ -39,12 +39,12 @@ const Form = () => {
     const uerNameValidation = () => {
         const { username } = formData;
         if (username.length === 0) {
-            setErrors((prev) => ({ ...prev, username: 'Username is required' }));
+            setErrors((prev) => ({ ...prev, username: Lang ==='en'?'Username is required':"هذا الحقل  مطلوب" }));
             return false;
         }
         if (mode === 'create') {
             if (!/^[A-Za-z0-9]+$/.test(username)) {
-                setErrors((prev) => ({ ...prev, username: 'No special characters allowed' }));
+                setErrors((prev) => ({ ...prev, username: Lang ==='en'?'No special characters allowed':"غير مسموح بالرموز" }));
                 return false;
             }
         }
@@ -55,23 +55,23 @@ const Form = () => {
     const passwordValidation = () => {
         const { password } = formData;
         if (!password) {
-            setErrors((prev) => ({ ...prev, password: 'Password is required' }));
+            setErrors((prev) => ({ ...prev, password: Lang ==='en'?'Password is required':"هذا الحقل  مطلوب" }));
             return false;
         }
 
         if (mode === 'create') {
             if (password.length < 8) {
-                setErrors((prev) => ({ ...prev, password: 'At least 8 characters' }));
+                setErrors((prev) => ({ ...prev, password: Lang ==='en'?'At least 8 characters':"على الاقل 8 حروف او ارفام" }));
                 return false;
             }
 
             if (!/[A-Z]/.test(password)) {
-                setErrors((prev) => ({ ...prev, password: 'At least one uppercase letter' }));
+                setErrors((prev) => ({ ...prev, password: Lang ==='en'?'At least one uppercase letter':"على الاقل حرف واحد كبير" }));
                 return false;
             }
 
             if (!/[*&^%$#@!]/.test(password)) {
-                setErrors((prev) => ({ ...prev, password: 'At least one special character (*&^%$#@!)' }));
+                setErrors((prev) => ({ ...prev, password: Lang ==='en'?'At least one special character (*&^%$#@!)':"على الاقل اضف رمز واحد" }));
                 return false;
             }
         }
@@ -82,11 +82,11 @@ const Form = () => {
     const nameValidation = () => {
         const { name } = formData;
         if (!name) {
-            setErrors((prev) => ({ ...prev, name: 'Name is required' }));
+            setErrors((prev) => ({ ...prev, name: Lang ==='en'?'Name is required':"هذا الحقل  مطلوب" }));
             return false;
         }
         if (!/^[A-Za-z\s]+$/.test(name)) {
-            setErrors((prev) => ({ ...prev, name: 'Name must contain only letters' }));
+            setErrors((prev) => ({ ...prev, name: Lang ==='en'?'Name must contain only letters':"مسموح بالحروف فقط" }));
             return false;
         }
 
@@ -98,11 +98,11 @@ const Form = () => {
     const emailValidation = () => {
         const { email } = formData;
         if (!email) {
-            setErrors((prev) => ({ ...prev, email: 'Email is required' }));
+            setErrors((prev) => ({ ...prev, email: Lang ==='en'?'Email is required':"هذا الحقل  مطلوب" }));
             return false;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setErrors((prev) => ({ ...prev, email: 'Enter a valid email address' }));
+            setErrors((prev) => ({ ...prev, email: Lang ==='en'?'Enter a valid email address':"أدخل عنوان بريد إلكتروني صالح" }));
             return false;
         }
         setErrors((prev) => ({ ...prev, email: '' }));
@@ -148,7 +148,7 @@ const Form = () => {
                 }
             } catch (error) {
                 // Handle unexpected errors (just in case)
-                setErrors((prev) => ({ ...prev, username: 'An unexpected error occurred.' }));
+                setErrors((prev) => ({ ...prev, username: Lang ==='en'?'An unexpected error occurred.':"خطا غير معروف" }));
 
             } finally {
                 setIsLoading(false);
@@ -168,7 +168,7 @@ const Form = () => {
                     setErrors((prev) => ({ ...prev, username: response.message }));
                 }
             } catch (error) {
-                setErrors((prev) => ({ ...prev, username: 'An error occurred during account creation' })); // Handle generic error
+                setErrors((prev) => ({ ...prev, username: Lang ==='en'?'An error occurred during account creation':"خطا اثناء انشاء حساب" })); // Handle generic error
             } finally {
                 setIsLoading(false);
             }
@@ -182,10 +182,10 @@ const Form = () => {
                     setErrors({ username: '' }); // Clear any previous errors
                     setTimeout(() => setGetPassResult(''), 5000); // Reset success flag after 2 seconds
                 } else {
-                    setErrors((prev) => ({ ...prev, username: response.message })); // Set the error message in case of failure
+                    setErrors((prev) => ({ ...prev, username: Lang ==='en'?response.message:"خطا فى البيانات" })); // Set the error message in case of failure
                 }
             } catch (error) {
-                setErrors((prev) => ({ ...prev, username: 'An error occurred during password retrieval' })); // Set general error message
+                setErrors((prev) => ({ ...prev, username: Lang ==='en'?'An error occurred during password retrieval':"خطا فى الحصول على كلمه السر" })); // Set general error message
             } finally {
                 setIsLoading(false);
             }
@@ -213,8 +213,8 @@ const Form = () => {
                 <h2 className='text-3xl font-bold text-my_red md:mb-5'>{dataText.logo} </h2>
 
                 <p className='text-my_red font-medium'>
-                    {mode === 'create' && (isCreated ? <span className='text-green-600 font-bold'>Account Created!</span> : 'Create your account')}
-                    {mode === 'get' && 'Get your password'}
+                    {mode === 'create' && (isCreated ? <span className='text-green-600 font-bold'>{Lang ==='en'? 'Account Created!':'تم انشاء الحساب'}</span> : Lang ==='en'?'Create your account':"قم بانشاء حساب")}
+                    {mode === 'get' && Lang ==='en'?'Get your password':"احصل على كلمة المرور"}
                 </p>
 
                 <div className="flex flex-col w-fit text-my_red">
@@ -291,14 +291,14 @@ const Form = () => {
                         : ''
                 }
 
-                {mode === 'get' && getpassResult && <div className="text-my_red">Your password is <span className='font-bold underline text-green-600'>{getpassResult}</span></div>}
+                {mode === 'get' && getpassResult && <div className="text-my_red">{Lang ==='en'?'Your password is':"كلمه السر هى"}<span className='font-bold underline text-green-600'>{getpassResult}</span></div>}
 
                 {mode === 'sign' && <p className='cursor-pointer underline font-medium text-my_red' onClick={() => setMode('get')}>{dataText.ForgotPassword}?</p>}
 
                 <button className='bg-my_dark text-white px-7 py-3 font-bold text-md rounded-md' onClick={handleSubmit}>
-                    {mode === 'sign' ? 'Sign In' : mode === 'get' ? 'Retrieve Password' : 'Create Account'}
+                    {mode === 'sign' ? Lang ==='en'?'Sign In':"تسجيل الدخول" : mode === 'get' ? Lang ==='en'?'Retrieve Password':"استرجاع كلمة المرور" : Lang ==='en'?'Create Account':"إنشاء حساب"}
                 </button>
-
+    
                 {mode === 'sign' ? (
                     <span className='text-my_red flex gap-3'>
                         {dataText.MSGCER} ? <p className='underline font-bold cursor-pointer' onClick={() => setMode('create')}>{dataText.CrOne}</p>

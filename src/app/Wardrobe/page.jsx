@@ -12,13 +12,13 @@ import UsedBar from '../Components/UsedBar';
 import FlipCard from '../Components/FlipCard';
 
 const page = () => {
-    const { isLoged, userId, viewUpCat, viewUplImg, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar } = useContext(UserContext);
+    const { isLoged, userId, viewUpCat, viewUplImg, ViewDetailesBar, setViewDetailesBar, ViewUsedBar, setViewUsedBar,Lang } = useContext(UserContext);
 
     
     return (
         !isLoged ?
             <div className="w-full h-[calc(100%-80px)] flex items-center justify-center">
-                <Link href={'/Log'} className='text-xl font-medium bg-my_dark text-my_light px-4 py-2'>Login to start</Link>
+                <Link href={'/Log'} className='text-md font-medium bg-my_dark text-my_light px-4 py-3 rounded-md'>{Lang ==='en'?'Login to start':'نسجيل الدخول للبدا'}</Link>
             </div>
             :
 

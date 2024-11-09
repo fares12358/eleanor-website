@@ -17,13 +17,13 @@ const ImageUpload = () => {
 
     // Check file type
     if (selectedFile && !selectedFile.type.startsWith('image/')) {
-      setStatusMessage('Please upload a valid image file.');
+      setStatusMessage(Lang ==='en'?'Please upload a valid image file.':'اختر صوره');
       return;
     }
 
     // Check file size (e.g., 5MB limit)
     if (selectedFile.size > 5 * 1024 * 1024) {
-      setStatusMessage('File size must be less than 5MB.');
+      setStatusMessage(Lang ==='en'?'File size must be less than 5MB.':"حجم الملفيجبب ان لا يكون اكر من 5 م ب");
       return;
     }
 
@@ -34,7 +34,7 @@ const ImageUpload = () => {
     e.preventDefault();
 
     if (!image) {
-      setStatusMessage('Please select an image to upload.');
+      setStatusMessage(Lang ==='en'?'Please select an image to upload.':"اختر صوره");
       return;
     }
 
@@ -48,13 +48,13 @@ const ImageUpload = () => {
         setStatusMessage('User ID is not available.');
         return;
       }
-      setStatusMessage('uploading...');
+      setStatusMessage(Lang ==='en'?'uploading...':"...تحميل");
       const response = await axios.post(`${api}/uploadImage/${userId}/${REF}`, formData);
 
-      setStatusMessage(response.data.message); // Display success message
+      setStatusMessage(Lang ==='en'?"Image uploaded successfully":"تم رفع الصوره بنجاح"); // Display success message
       setImage(null); // Reset the image state
     } catch (error) {
-      setStatusMessage(error.response?.data.message || 'Error uploading image');
+      setStatusMessage(error.response?.data.message || Lang ==='en'?'Error uploading image':"لم يتم رفع الصوره");
     } finally {
       setLoader(false);
     }

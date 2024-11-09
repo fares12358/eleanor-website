@@ -51,13 +51,9 @@ const Nav = () => {
   }, [isLoged]); // Update navigation items based on isLoged
 
   const [view, setview] = useState(false);
-  const handleClick = (clickedItem) => {
-    setNavigation((prev) =>
-      prev.map((item) => ({
-        ...item,
-        current: item.name === clickedItem.name,
-      }))
-    );
+
+  const handleClick = () => {
+
     setview(false);
     setViewNotfi(false);
   };
@@ -190,12 +186,12 @@ const Nav = () => {
 
 
   return (
-    <Disclosure as="nav" className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
+    <Disclosure as="nav" dir={Lang === 'en' ? 'ltr' : 'rtl'} className="sticky top-0 z-50 bg-my_light text-my_red pt-4">
       <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
 
         <div className="relative flex h-16 items-center justify-between">
 
-          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden gap-2 ">
+          <div className={`absolute inset-y-0 ${Lang === 'en' ? 'right-0 ' : 'left-0'} flex items-center sm:hidden gap-2 `}>
             {isLoged && (
               <>
                 <div className="relative">
@@ -215,7 +211,7 @@ const Nav = () => {
                       </span>
                       :
                       ''
-                  }
+                  } 
 
 
                 </div>
@@ -229,9 +225,9 @@ const Nav = () => {
                     height={30}
                     className="cursor-pointer sm:hidden block z-20 "
                   />
-                  <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl uppercase absolute -left-[calc(100%)] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
-                    <div className="px-4 py-2 text-my_light font-bold">hi {username} ! </div>
-                    <div className="px-4 py-2 text-my_light font-bold" onClick={handleLogOut}>Log out</div>
+                  <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl uppercase absolute -left-[100%] top-[calc(100%+20px)] w-fit  min-w-[120px] bg-my_dark  flex-col gap-2 items-center justify-center rounded-xl`}>
+                    <div className="px-4 py-2 text-my_light font-bold">{dataText.hi} {username} ! </div>   
+                    <div className="px-0 py-2 text-my_light font-bold" onClick={handleLogOut}>{dataText.logout}</div>
                   </div>
                 </div>
 
@@ -251,32 +247,48 @@ const Nav = () => {
           </div>
 
 
-          <div className="flex flex-1 items-center justify-start sm:items-center sm:justify-start px-1 sm:px-0">
-            <div className=" bg-my_dark w-fit h-fit text-my_light flex items-center justify-center mx-2 rounded-md">
-              <div className="py-1 px-2 uppercase text-xs sm:text-xl flex items-center justify-center gap-2 cursor-pointer" onClick={handleLang}>{Lang}
-                <Image src={'/svgs/translate.svg'} width={20} height={20} alt="tran" />
+          <div className="flex items-center justify-between px-1 sm:px-0 w-full ">
+            <div className="flex items-center justify-center">
 
+              <div className=" bg-my_dark w-fit h-fit text-my_light flex items-center justify-center mx-2 rounded-md">
+                <div className="py-1 px-2 uppercase text-xs sm:text-xl flex items-center justify-center gap-2 cursor-pointer" onClick={handleLang}>{Lang}
+                  <Image src={'/svgs/translate.svg'} width={20} height={20} alt="tran" />
+                </div>
               </div>
+              <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
+                {dataText.logo}
+              </h1>
             </div>
-            <h1 className="text-xl font-bold text-my_red uppercase md:text-4xl">
-              {dataText.logo}
-            </h1>
-            <div className="hidden ml-auto sm:block">
+            <div className="hidden sm:block">
               <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => handleClick(item)}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item.current ? "font-bold underline underline-offset-8" : "",
-                      "block px-3 py-2 text-2xl font-bold text-my_red"
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+
+
+
+                {
+                  isLoged ?
+                    <>
+                      <Link
+                        href={'/'}
+                        className={" block px-3 py-2 text-2xl font-bold text-my_red"}
+                        onClick={handleClick}
+                      >
+                        {dataText.home}
+                      </Link>
+
+                      <Link
+                        href={'/Wardrobe'}
+                        className={" block px-3 py-2 text-2xl font-bold text-my_red"}
+                        onClick={handleClick}
+
+                      >
+                        {dataText.Wardrobe}
+                      </Link>
+
+                    </>
+                    : ''
+                }
+
+
                 {isLoged ? (
                   <>
                     <div className="relative flex items-center justify-center">
@@ -310,16 +322,16 @@ const Nav = () => {
                         height={30}
                         className="cursor-pointer"
                       />
-                      <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute right-full top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
-                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">hi {username} ! </div>
-                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>{dataText.logout}</div>
+                      <div className={`${view ? 'flex' : 'hidden'} my_transition shadow-xl absolute ${Lang === 'en' ? 'right-full' : 'left-full'}  top-[calc(100%+10px)] w-fit  min-w-[120px] bg-my_dark flex-col gap-2 items-center justify-center rounded-xl`}>
+                        <div className="px-4 py-2 text-my_light font-bold uppercase cursor-pointer">{dataText.hi} {username} ! </div>
+                        <div className="px-0 py-2 text-my_light font-bold uppercase cursor-pointer" onClick={handleLogOut}>{dataText.logout}</div>
                       </div>
                     </div>
                   </>
                 ) : (
                   <Link
                     href="/Log"
-                    className="flex items-center justify-center px-6 text-2xl font-medium text-my_red border border-my_red uppercase"
+                    className="flex items-center justify-center px-6 py-2 text-2xl font-medium text-my_red border-2 border-my_red uppercase"
                   >
                     {dataText.login}
                   </Link>
@@ -331,18 +343,34 @@ const Nav = () => {
       </div>
       <DisclosurePanel className="sm:hidden absolute w-full bg-myBlack bg-my_light">
         <div className="px-2 pb-3 pt-2 text-center bg-my_light my_transition shadow-2xl">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={() => handleClick(item)}
-              aria-current={item.current ? "page" : undefined}
-              className="block px-3 py-2 text-md font-bold text-my_red"
 
-            >
-              {item.name}
-            </Link>
-          ))}
+          {
+            isLoged ?
+              <>
+                <Link
+                  href={'/'}
+                  className={"block px-3 py-2 text-md font-bold text-my_red"}
+                  onClick={handleClick}
+
+                >
+                  {dataText.home}
+                </Link>
+
+                <Link
+                  href={'/Wardrobe'}
+                  className={"block px-3 py-2 text-md font-bold text-my_red"}
+                  onClick={handleClick}
+
+                >
+                  {dataText.Wardrobe}
+                </Link>
+
+              </>
+              : ''
+          }
+
+
+
           {!isLoged && (
             <Link
               href="/Log"
@@ -377,13 +405,13 @@ const Nav = () => {
                           className="bg-my_light w-full  text-center  rounded-sm text-my_dark uppercase text-md cursor-pointer"
                           onClick={() => HadleDeletNotItem(key, item)}
                         >
-                          Donate it
+                          {dataText.Donate}
                         </div>
                         <div
                           className="bg-my_light  w-full  text-center rounded-sm text-my_dark uppercase text-md cursor-pointer"
                           onClick={() => handleReUse(key, item)}
                         >
-                          Reuse it
+                          {dataText.ReuseIt}
                         </div>
                       </div>
                     </div>

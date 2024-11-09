@@ -23,10 +23,8 @@ const LeftBar = () => {
             if (response.success) {
                 setCategories(response.cat); // Use the correct property from the response
             } else {
-                console.error("Error fetching categories:", response.message); // Log any error message received from the server
             }
         } catch (error) {
-            console.error("Error fetching categories:", error); // Log the error for debugging
         } finally {
             setLoader(false); // End loading state
         }
@@ -175,10 +173,10 @@ const LeftBar = () => {
                             </div>
                             :
                             <>
-                                <h2 className='text-my_light'>Do you want to delete it ?</h2>
+                                <h2 className='text-my_light'>{dataText.AskDlete}</h2>
                                 <div className="flex items-center justify-center gap-5">
-                                    <div className="bg-my_light text-my_dark px-2 cursor-pointer" onClick={() => { HandleDeleteCategory(DelteItem) }}>Delete</div>
-                                    <div className="bg-my_light text-my_dark px-2 cursor-pointer" onClick={() => { setViewCheck(false); }}>Cancel</div>
+                                    <div className="bg-my_light text-my_dark px-2 cursor-pointer" onClick={() => { HandleDeleteCategory(DelteItem) }}>{dataText.Delete}</div>
+                                    <div className="bg-my_light text-my_dark px-2 cursor-pointer" onClick={() => { setViewCheck(false); }}>{dataText.Cancel}</div>
                                 </div>
                             </>
                     }

@@ -22,7 +22,7 @@ const AddCategory = () => {
             setLoader(true)
             const response = await addCategory(userId, catNamIN,selectedOption);
             if (response.success) {
-                setError('Category added successfully!'); // Display success message
+                setError( Lang ==='en'?'Category added successfully!':'تم الاضافه بنجاح'); // Display success message
                 // Optionally, clear the input field or update state
                 setCatNamIN('');
                 setSelectedOption('');
@@ -30,7 +30,7 @@ const AddCategory = () => {
                 setError(response.message);
             }
         } catch (error) {
-            setError('Error adding category');
+            setError(Lang ==='en'?'Error adding category':'لم يتم الاضافه بنجاح');
         } finally {
             setLoader(false);
         }
@@ -38,9 +38,9 @@ const AddCategory = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!catNamIN) {
-            setError('Category name is required');
+            setError(Lang ==='en'? 'Category name is required':'اسم الفئه مطلوب');
         }  else if (!selectedOption) {
-            setError('Please select an option');
+            setError( Lang ==='en'?'Please select an option' :'اختر نوع الفئه');
         } else {
             handleAddCategory();
         }
