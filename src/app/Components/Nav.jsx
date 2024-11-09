@@ -331,7 +331,7 @@ const Nav = () => {
                 ) : (
                   <Link
                     href="/Log"
-                    className="flex items-center justify-center px-6 py-2 text-2xl font-medium text-my_red border-2 border-my_red uppercase"
+                    className="flex items-center justify-center px-6 py-2 text-2xl font-medium text-my_red border border-my_red uppercase"
                   >
                     {dataText.login}
                   </Link>
